@@ -1,0 +1,30 @@
+{
+  "name": "github.hmasum18.blooddonor",
+  "version": "1.0.0",
+  "description": "Blood management system",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon .",
+    "start": "node ."
+  },
+  "keywords": [
+    "nodejs",
+    "oracle"
+  ],
+  "author": "Hasan Masum, Ashfaq Rahman",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^12.0.3",
+    "express": "^4.17.2",
+    "express-promise-router": "^4.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "oracledb": "^5.3.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15"
+  }
+}
