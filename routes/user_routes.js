@@ -18,6 +18,7 @@ router.get("/", async function (req, res, next) {
     return res.status(500).json({error: "Internal server error"})
 }); */
 router.get("/",authenticateToken, userController.getUsers);
-router.get("/:id", authenticateToken, userController.getUser);
+router.get("/me", authenticateToken, userController.getUser);
+router.get("/:id",authenticateToken, userController.getUser)
 
 export default router;
