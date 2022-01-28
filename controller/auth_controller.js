@@ -70,7 +70,7 @@ export default class AuthController{
                     const user_id = user.ID;
                     const user_name = user.NAME;
                     const user_email = user.EMAIL;
-                    const tokenInfo = {user_id, user_name, user_email};
+                    const tokenInfo = {ID: user_id, NAME: user_name, EMAIL:user_email};
                     const token = generateJwtToken(tokenInfo);
                     console.log(token);
                     return res.status(200).json({code:200, message: "Success", token: token});

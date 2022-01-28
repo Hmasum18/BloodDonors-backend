@@ -25,11 +25,7 @@ export default class UserController{
         console.log(`"user id: ${id}`);
 
         if(id === undefined){
-            const token = req.headers["authorization"];
-            const userInfo = parseJwt(token);
-            //console.log(`token: ${token}`);
-            //console.log(userInfo);
-            id = userInfo.user_id;
+            id = req.body.user.ID;
         }
        
 

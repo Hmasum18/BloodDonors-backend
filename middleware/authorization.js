@@ -9,7 +9,7 @@ export function authenticateToken(req, res, next){
     jwt.verify(token, process.env.JWT_SECRET, function(error, user){
         if(error)
             return res.status(403).json({error: error.message});
-        req.user = user;
+        req.body.user = user;
         next();
     })
 }
