@@ -4,6 +4,8 @@
  */
 import oracledb from 'oracledb';
 oracledb.outFormat = oracledb.OBJECT;
+// https://stackoverflow.com/questions/34216477/node-js-oracle-driver-retrieving-clob-field
+oracledb.fetchAsString = [ oracledb.CLOB ];
 
 var connection = undefined;
 
@@ -16,8 +18,6 @@ export default async function db_query(query, params){
             password: process.env.DB_PASSWORD,
             connectString: process.env.DB_CONNECTION_STRING
         })
-    }
-    if(connection != undefined){
         console.log("connected to database");
     }
     try{

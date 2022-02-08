@@ -4,6 +4,7 @@ import Router from "express-promise-router";
 import { authenticateToken } from "../middleware/authorization.js";
 const router = Router();
 
-router.post("/create", bloodPostController.createPost);
+router.post("/", authenticateToken, bloodPostController.createPost);
+router.get("/:post_id", authenticateToken, bloodPostController.getBloodPost);
 
 export default router;

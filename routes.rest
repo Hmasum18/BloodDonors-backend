@@ -27,8 +27,28 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email" : "masum4@email.com",
+    "email" : "masum@email.com",
     "password" : "masum"
 }
 
+### blood post
+POST http://localhost:3000/api/post/blood-post/
+Content-Type: application/json
+
+{
+   "blood_group":"O+",
+   "amount":2,
+   "location":{
+      "display_name":"hi",
+      "latitude":15.526,
+      "longitude":36.35
+   },
+   "contact":"235468778965",
+   "due_time":"2022-02-20",
+   "additional_info":"{'uuu': 'vvv'}"
+}
+
+### blood post
+GET http://localhost:3000/api/post/blood-post/
+Content-Type: application/json
 
