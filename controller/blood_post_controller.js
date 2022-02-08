@@ -16,15 +16,15 @@ export default class BloodPostController{
 
     createPost = async (req, res) => {
 
-        console.log(req);
+        console.log(req.body);
 
         //console.log('creating post', req.body.location);
         //console.log('creating post', req.body.location['latitude']);
         const current_time = new Date();
 
-        let result = await locationController.checkingExistingLocation(req.body.location.display_name);
+        let result = await locationController.checkingExistingLocation(req.body.location.displayName);
         if(!result.success){
-            return res.status(500).json({code: 200, error: "server side problem"});
+            return res.status(500).json({code: 500, message: "server side problem"});
         }
 
         let locationInfo;
@@ -35,14 +35,14 @@ export default class BloodPostController{
                 id: uuidv4(),
                 latitude: req.body.location.latitude,
                 longitude: req.body.location.longitude,
-                description: req.body.location.display_name ,
+                description: req.body.location.displayName ,
                 created: current_time,
                 updated: current_time,
                 active: 1
             };
             result = await locationRepository.insertOne(locationInfo)
             if (!result.success) {
-                return res.status(500).json({code: 500, error: "server side problem"});
+                return res.status(500).json({code: 500, message: "server side problem"});
             }
         }else
             locationInfo = objectKeysToLC(result.data[0]);
@@ -59,7 +59,7 @@ export default class BloodPostController{
 
         result = await postRepository.insertOne(generalPostInfo);
         if(!result.success){
-            return res.status(500).json({code: 500, error: "server side problem"});
+            return res.status(500).json({code: 500, message: "server side problem"});
         }
 
         const bloodPostInfo = {
@@ -75,9 +75,9 @@ export default class BloodPostController{
 
         result = await bloodPostRepository.insertOne(bloodPostInfo);
         if(result.success){
-            return res.status(200).json({code: 201, message: "blood post creation done"});
+            return res.status(201).json({code: 201, message: "blood post creation done"});
         }
-        return res.status(500).json({code: 500, error: "server side problem"});
+        return res.status(500).json({code: 500, message: "server side problem"});
     }
 
     getBloodPost = async function(req, res){
@@ -87,7 +87,7 @@ export default class BloodPostController{
         if(result.success){
             return res.status(200).json({code: 200, data: result.data});
         }
-        return res.status(500).json({code: 500, error: "server side problem"});
+        return res.status(500).json({code: 500, message: "server side problem"});
     }
 
 
