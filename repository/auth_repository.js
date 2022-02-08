@@ -25,25 +25,13 @@ export default class AuthRepository{
     }
 
     insertUser = async function (user) {
-        console.log(`inserting ${user.id} ${user.name}, ${user.email}, ${user.phone}`);
+        // console.log(`inserting ${user.id} ${user.name}, ${user.email}, ${user.phone}`);
+        const columns = Object.keys(user).join(', ');
+        const params = Object.values(user);
         const query =  `insert into "USERS" 
-        ("ID", "LOCATION_ID", "NAME", "EMAIL", "PASSWORD", "PHONE_NUMBER"
-        , "BLOOD_GROUP", "GENDER" ,"CREATED", "UPDATED", "ACTIVE") 
+        (${columns}) 
         values(:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11)`;
-        const d = new Date();
-        return await db_query(query, [
-            user.id, // 1 ID
-            user.locationId, // 2 LOCATION_ID
-            user.name, // 3 NAME
-            user.email, // 4 EMAIL
-            user.password, // 5 PASSWORD
-            user.phoneNumber, // 6 PHONE_NUMBER
-            user.bloodGroup, // 7 BLOOD_GROUP
-            user.gender, // 8 GENDER
-            d, //9 created
-            d, //10 updated
-            1 //11 active
-        ]);
+        return await db_query(query, params);
     }
 
     getUser = async function (email) {

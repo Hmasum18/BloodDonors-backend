@@ -6,8 +6,8 @@ export default class BloodPostRepository{
         let columns = Object.keys(postInfo);
         columns = columns.join(', ');
         let params = Object.values(postInfo);
-        console.log("BloodPostRepository:insertOne():")
-        console.log(columns, params)
+        // console.log("BloodPostRepository:insertOne():")
+        // console.log(columns, params)
         const query = `
             insert into blood_post 
             (${columns}) 

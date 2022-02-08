@@ -27,7 +27,7 @@ export default class BloodPostController{
             return res.status(500).json({code: 200, error: "server side problem"});
         }
 
-        var locationInfo;
+        let locationInfo;
 
         if(result.data.length === 0) {
             console.log('inserting location');

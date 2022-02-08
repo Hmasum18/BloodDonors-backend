@@ -32,16 +32,19 @@ export default class AuthController{
         if(!locationResult.success){
             return res.status(500).json({code: 500, message: "Internal server error!"})
         }
-
+        const d = new Date();
         const user = {
             id: uuidv4(),
-            locationId: locationId,
+            location_id: locationId,
             name: req.body.name,
             email: req.body.email,
-            phoneNumber: req.body.phoneNumber,
+            phone_number: req.body.phone,
             password: hashedPassword,
-            bloodGroup: req.body.bloodGroup,
-            gender: req.body.gender,    
+            blood_group: req.body.bloodGroup,
+            gender: req.body.gender,
+            created: d,
+            updated: d,
+            active: 1
         }
         
 
