@@ -1,11 +1,11 @@
 ### fetch all users
-GET http://localhost:3000/api/user HTTP/1.1
+GET {{api_url}}/api/user HTTP/1.1
 
 ### fetch user with id
-GET http://localhost:3000/api/user/d9d5330c-62a3-427e-9aad-a749a29eceeb HTTP/1.1
+GET {{api_url}}/api/user/d9d5330c-62a3-427e-9aad-a749a29eceeb HTTP/1.1
 
 ### register
-POST http://localhost:3000/api/auth/register 
+POST {{api_url}}/api/auth/register
 Content-Type: application/json
 
 {
@@ -23,16 +23,16 @@ Content-Type: application/json
 }
 
 ### login
-POST http://localhost:3000/api/auth/login 
+POST {{api_url}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email" : "masum@email.com",
-    "password" : "masum"
+    "email" : "a",
+    "password" : "12365478"
 }
 
 ### blood post
-POST http://localhost:3000/api/post/blood-post/
+POST {{api_url}}/api/post/blood-post/
 Content-Type: application/json
 
 {
@@ -48,7 +48,13 @@ Content-Type: application/json
    "additional_info":"{'uuu': 'vvv'}"
 }
 
-### blood post
-GET http://localhost:3000/api/post/blood-post/
+### blood post by id
+GET {{api_url}}/api/post/blood-post/5892f44e-0d52-4b26-a19f-ba9c8779af42
 Content-Type: application/json
+authorization: {{token}}
+
+### all blood post
+GET {{api_url}}/api/post/blood-post/
+Content-Type: application/json
+authorization: {{token}}
 

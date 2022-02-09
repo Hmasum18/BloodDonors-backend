@@ -15,10 +15,10 @@ export default class AuthController{
             id: locationId,
             lat: req.body.location.latitude,
             lang: req.body.location.longitude,
-            text: req.body.location.text
+            text: req.body.location.display_name,
         }
 
-        const emailCheck = await authRepo.getUser(req.body.email);
+        const emailCheck = await authRepo.getUser(req.body.email, false);
         if(emailCheck.success){
             if(emailCheck.data.length >= 1){
                 //const user = result.data[0];
@@ -27,7 +27,7 @@ export default class AuthController{
             }
         }
 
-        const locationResult = await authRepo.insertUserLocation(userLocation);
+        const locationResult = await authRepo.insertUserLocation(userLocation, false);
         
         if(!locationResult.success){
             return res.status(500).json({code: 500, message: "Internal server error!"})
@@ -48,7 +48,7 @@ export default class AuthController{
         }
         
 
-        const result = await authRepo.insertUser(user);
+        const result = await authRepo.insertUser(user, true);
         console.log(result);
         if(result.success){
             return res.status(201).json({code: 201, data: result.data});
@@ -62,7 +62,7 @@ export default class AuthController{
         const pwd = cred.password;
         console.log(`user email ${email}`);
 
-        const result = await authRepo.getUser(email);
+        const result = await authRepo.getUser(email, false);
         //console.log(result);
         if(result.success){
             if(result.data.length >= 1){
@@ -73,7 +73,7 @@ export default class AuthController{
                     const user_id = user.ID;
                     const user_name = user.NAME;
                     const user_email = user.EMAIL;
-                    const tokenInfo = {ID: user_id, NAME: user_name, EMAIL:user_email};
+                    const tokenInfo = {id: user_id, name: user_name, email:user_email};
                     const token = generateJwtToken(tokenInfo);
                     console.log(token);
                     return res.status(200).json({code:200, message: "Success", token: token});

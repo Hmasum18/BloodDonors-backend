@@ -10,7 +10,7 @@ oracledb.fetchAsString = [ oracledb.CLOB ];
 var connection = undefined;
 
 // default can be imported as import db_query from "./database/oracle_db.js"
-export default async function db_query(query, params){
+export default async function db_query(query, params, autoCommit = true){
     console.log("inside db query")
     if(connection === undefined){
         connection = await oracledb.getConnection({
@@ -21,8 +21,8 @@ export default async function db_query(query, params){
         console.log("connected to database");
     }
     try{
-        let result = await connection.execute(query, params, {autoCommit: true,});
-        console.log(result)
+        let result = await connection.execute(query, params, {autoCommit: autoCommit,});
+        // console.log(result)
         return {
 
             success: true,

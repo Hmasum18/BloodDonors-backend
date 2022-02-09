@@ -40,7 +40,7 @@ export default class BloodPostController{
                 updated: current_time,
                 active: 1
             };
-            result = await locationRepository.insertOne(locationInfo)
+            result = await locationRepository.insertOne(locationInfo, false)
             if (!result.success) {
                 return res.status(500).json({code: 500, message: "server side problem"});
             }
@@ -49,7 +49,7 @@ export default class BloodPostController{
 
         const generalPostInfo = {
             id: uuidv4(),
-            user_id: req.body.user.ID,
+            user_id: req.body.user.id,
             description: null,
             privacy: req.body.privacy ? req.body.privacy : 0, // 0 = no privacy, not 0 = some privacy
             created: current_time,
@@ -57,7 +57,7 @@ export default class BloodPostController{
             active: 1
         }
 
-        result = await postRepository.insertOne(generalPostInfo);
+        result = await postRepository.insertOne(generalPostInfo, false);
         if(!result.success){
             return res.status(500).json({code: 500, message: "server side problem"});
         }
@@ -73,21 +73,72 @@ export default class BloodPostController{
         }
 
 
-        result = await bloodPostRepository.insertOne(bloodPostInfo);
+
+        result = await bloodPostRepository.insertOne(bloodPostInfo, true);
+
         if(result.success){
-            return res.status(201).json({code: 201, message: "blood post creation done"});
+
+            ['created', 'updated', 'active'].forEach(e => delete locationInfo[e])
+
+            // delete locationInfo.created; delete locationInfo.updated; delete locationInfo.active;
+            const data = {
+                ...bloodPostInfo,
+                location: locationInfo,
+                user_id: generalPostInfo.user_id,
+                user_name: req.body.user.name,
+                created: generalPostInfo.created,
+            }
+            delete data.location_id;
+            return res.status(201).json({code: 201, message: "post created", data});
         }
         return res.status(500).json({code: 500, message: "server side problem"});
     }
 
-    getBloodPost = async function(req, res){
-        const post_id = req.params.id;
-        const result = await bloodPostRepository.findOne(post_id);
-        console.log("getBloodPost: ", result);
-        if(result.success){
-            return res.status(200).json({code: 200, data: result.data});
+    getBloodPostById = async function(req, res){
+        const bloodPost = {
+            post_id: '',
+            blood_group: '',
+            amount: 0,
+            contact: '',
+            due_time: '',
+            additional_info: '',
+            location: {},
+            user_id: '',
+            user_name: '',
+            created: '',
+        }
+        const post_id = req.params.post_id;
+        const bloodPostResult = await bloodPostRepository.findOne(post_id, false);
+        let data = objectKeysToLC(bloodPostResult.data[0]);
+
+        const locationData = await locationRepository.findByID(data.location_id,false);
+        bloodPost.location = objectKeysToLC(locationData.data[0])
+
+        for (let key of Object.keys(data)) {
+            if(key !== 'location_id')
+                bloodPost[key] = data[key];
+        }
+        if(bloodPostResult.success){
+            return res.status(200).json({code: 200, data: bloodPost});
         }
         return res.status(500).json({code: 500, message: "server side problem"});
+    }
+
+    getAllBloodPost = async (req, res) => {
+        const bloodPostResult = await bloodPostRepository.findAll(false);
+        console.log(bloodPostResult);
+        if(!bloodPostResult.success){
+            return res.status(500).json({code: 500, message: "server side problem"})
+        }
+        const locationResult = await locationRepository.findAll(false);
+        let data = bloodPostResult.data.map(x => {
+            let locationData = locationResult.data.find(y => y.id === x.location_id);
+            return {
+                ...x,
+                location: locationData
+            }
+        })
+        return res.status(200).json({code: 200, message: `total count: ${data.length}`, data});
     }
 
 

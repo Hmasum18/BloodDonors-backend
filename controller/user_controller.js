@@ -11,7 +11,7 @@ const userRepo = new UserRepository();
 export default class UserController{
     getUsers = async function (req, res, next) {
         console.log("inside user controller getUsers")
-        const result = await userRepo.findAll();
+        const result = await userRepo.findAll(false);
         if(result.success){
             return res.status(200).json({code: 200, data: result.data});
         }
@@ -25,15 +25,15 @@ export default class UserController{
         console.log(`"user id: ${id}`);
 
         if(id === undefined){
-            id = req.body.user.ID;
+            id = req.body.user.id;
         }
        
 
-        const result = await userRepo.findOne(id);
+        const result = await userRepo.findOne(id, false);
         if(result.success){
             if(result.data.length >= 1){
                 const user = result.data[0];
-                const locationResult = await userRepo.findUserLocation(user.LOCATION_ID);
+                const locationResult = await userRepo.findUserLocation(user.LOCATION_ID, false);
                 if(locationResult.success && locationResult.data.length>0){
                     const location = locationResult.data[0];
                     ['ID', 'ACTIVE'].forEach(e => delete location[e]);

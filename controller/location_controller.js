@@ -6,7 +6,7 @@ export default class LocationController {
 
     checkingExistingLocation = async (locationDescription) => {
 
-        const result = await locationRepository.getOneUsingDescription(locationDescription);
+        const result = await locationRepository.getOneUsingDescription(locationDescription, false);
         if (result.success) {
             return {
                 success: true,
