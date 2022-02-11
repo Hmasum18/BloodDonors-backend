@@ -27,8 +27,8 @@ POST {{api_url}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email" : "a",
-    "password" : "12365478"
+    "email" : "m",
+    "password" : "masum123"
 }
 
 ### blood post
@@ -58,3 +58,12 @@ GET {{api_url}}/api/post/blood-post/
 Content-Type: application/json
 authorization: {{token}}
 
+### comment create
+POST {{api_url}}/api/comment/create/
+Content-Type: application/json
+authorization: {{token}}
+
+{
+  "post_id":"ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
+  "text": "alu vorta"
+}
