@@ -30,7 +30,7 @@ export default class CommentController {
                 user_name: req.body.user.name,
                 created: date
             }
-            return res.status(201).json({code: 201, message: 'comment posted', data: responseData})
+            return res.status(201).json({code: 201, message: 'comment created', data: responseData})
         }
         return res.status(500).json({code: 500, message: 'server side problem'})
     }
@@ -38,6 +38,11 @@ export default class CommentController {
     getAllComment = async (req, res) => {
         let post_id = req.params.post_id;
         let result = await  commentRepository.getAllComment(post_id, false);
+        if(result.success)
+        {
+            return res.status(200).json({code: 200, message: 'retrieved all data', data: result.data})
+        }
+        return res.status(500).json({code: 500, message: 'server side problem'})
     }
 
 

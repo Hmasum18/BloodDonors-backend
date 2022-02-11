@@ -59,11 +59,20 @@ Content-Type: application/json
 authorization: {{token}}
 
 ### comment create
-POST {{api_url}}/api/comment/create/
+POST {{api_url}}/api/comment/
 Content-Type: application/json
 authorization: {{token}}
 
 {
   "post_id":"ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
-  "text": "alu vorta"
+  "text": "alu vaja"
 }
+### comment create
+GET {{api_url}}/api/comment/ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92
+Content-Type: application/json
+authorization: {{token}}
+
+//{
+//  "post_id":"ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
+//  "text": "alu vaja"
+//}

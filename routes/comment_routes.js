@@ -5,6 +5,7 @@ import {authenticateToken} from "../middleware/authorization.js";
 const commentController = new CommentController()
 const router = Router();
 
-router.post('/create', authenticateToken, commentController.create)
+router.post('/', authenticateToken, commentController.create)
+router.get('/:post_id', authenticateToken, commentController.getAllComment);
 
 export default router;
