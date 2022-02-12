@@ -126,13 +126,15 @@ export default class BloodPostController{
 
     getAllBloodPost = async (req, res) => {
         const bloodPostResult = await bloodPostRepository.findAll(false);
-        console.log(bloodPostResult);
+        // console.log(bloodPostResult);
         if(!bloodPostResult.success){
             return res.status(500).json({code: 500, message: "server side problem"})
         }
         const locationResult = await locationRepository.findAll(false);
         let data = bloodPostResult.data.map(x => {
-            let locationData = locationResult.data.find(y => y.id === x.location_id);
+            let locationData = locationResult.data.find(y => objectKeysToLC(y).id === x.location_id);
+            console.log(locationData);
+            console.log(x.location_id, locationData.id)
             return {
                 ...x,
                 location: locationData
