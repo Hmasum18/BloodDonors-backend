@@ -135,10 +135,12 @@ export default class BloodPostController{
             let locationData = locationResult.data.find(y => objectKeysToLC(y).id === x.location_id);
             console.log(locationData);
             console.log(x.location_id, locationData.id)
+            delete x.location_id;
             return {
                 ...x,
-                location: locationData
+                location: objectKeysToLC(locationData)
             }
+
         })
         return res.status(200).json({code: 200, message: `total count: ${data.length}`, data});
     }
