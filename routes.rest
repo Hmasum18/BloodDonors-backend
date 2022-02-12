@@ -49,7 +49,7 @@ Content-Type: application/json
 }
 
 ### blood post by id
-GET {{api_url}}/api/post/blood-post/5892f44e-0d52-4b26-a19f-ba9c8779af42
+GET {{api_url}}/api/post/blood-post/ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92
 Content-Type: application/json
 authorization: {{token}}
 
@@ -67,12 +67,24 @@ authorization: {{token}}
   "post_id":"ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
   "text": "alu vaja"
 }
-### comment create
+
+### comment get
 GET {{api_url}}/api/comment/ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92
 Content-Type: application/json
 authorization: {{token}}
 
-//{
-//  "post_id":"ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
-//  "text": "alu vaja"
-//}
+
+### comment create
+POST {{api_url}}/api/react/post
+Content-Type: application/json
+authorization: {{token}}
+
+{
+  "post_id":"ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92"
+}
+
+
+### react get
+GET {{api_url}}/api/react/post/ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92
+Content-Type: application/json
+authorization: {{token}}

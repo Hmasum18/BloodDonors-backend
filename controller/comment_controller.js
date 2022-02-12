@@ -40,7 +40,7 @@ export default class CommentController {
         let result = await  commentRepository.getAllComment(post_id, false);
         if(result.success)
         {
-            return res.status(200).json({code: 200, message: 'retrieved all data', data: result.data})
+            return res.status(200).json({code: 200, message: 'retrieved all comments', data: result.data})
         }
         return res.status(500).json({code: 500, message: 'server side problem'})
     }
