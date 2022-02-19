@@ -5,12 +5,27 @@ export default class PostReactRepository {
     create = async (obj, autoCommit = true) => {
         let columns = Object.keys(obj).join(', ');
         let params = Object.values(obj);
-        console.log(columns, params)
         let query = `
             insert into post_react
             (${columns})
             values 
-            (:1, :2, :3, :4, :5, :6)
+            (:1, :2, :3)
+        `
+        return await db_query(query, params, autoCommit);
+    }
+
+    delete = async (obj, autoCommit = true) => {
+        let params = [obj.user_id, obj.post_id];
+        let query = `
+            update post_react set active = 0 where user_id = :1 and post_id = :2
+        `
+        return await db_query(query, params, autoCommit);
+    }
+
+    setReact = async (obj, autoCommit = true) => {
+        let params = [obj.user_id, obj.post_id];
+        let query = `
+            update post_react set active = 1 where user_id = :1 and post_id = :2
         `
         return await db_query(query, params, autoCommit);
     }
@@ -24,10 +39,10 @@ export default class PostReactRepository {
                 u.id "user_id",
                 u.name "user_name"
             from post_react pr join users u on (pr.user_id = u.id)
-            where pr.post_id = :1 
+            where pr.post_id = :1 and pr.active = 1
             order by "created"
         `
-        let params = [post_id]
+        let params = [post_id, ]
         return await db_query(query, params, autoCommit);
     }
 }

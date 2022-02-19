@@ -8,8 +8,8 @@ const TAG = "user_controlller.js->";
 export default class UserRepository{
 
     findAll = async function (autoCommit = true){
-        console.log("inside findAll")
-        const query = `SELECT * FROM "USERS"`;
+        // console.log("inside findAll")
+        const query = `SELECT * FROM users where active = 1 order by created`;
         return await db_query(query, [], autoCommit);
     }
 
@@ -19,7 +19,7 @@ export default class UserRepository{
     }
 
     findUserLocation = async function (location_id, autoCommit = true) {
-        console.log(`${TAG} findUserLocation`)
+        // console.log(`${TAG} findUserLocation`)
         const binds = {locationID: location_id};
         const query =  `SELECT * FROM "LOCATION" WHERE ID= :locationID`;
         return await db_query(query, binds, autoCommit);

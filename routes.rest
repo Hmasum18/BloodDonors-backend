@@ -1,24 +1,28 @@
 ### fetch all users
 GET {{api_url}}/api/user HTTP/1.1
+Content-Type: application/json
+authorization: {{token}}
 
 ### fetch user with id
 GET {{api_url}}/api/user/d9d5330c-62a3-427e-9aad-a749a29eceeb HTTP/1.1
+Content-Type: application/json
+authorization: {{token}}
 
 ### register
 POST {{api_url}}/api/auth/register
 Content-Type: application/json
 
 {
-    "name" : "masum2",
-    "email" : "masum2@email.com",
-    "password" : "masum2",
-    "phoneNumber": "1234567",
+    "name" : "sayem",
+    "email" : "sayem@email.com",
+    "password" : "sayem",
+    "phone": "1234567",
     "bloodGroup" : "AB+",
     "gender": "male",
     "location" : {
         "latitude" : 23.7258109,
         "longitude" : 90.3908448,
-        "text": "Titumir Hall, BUET"
+        "display_name": "Titumir Hall, BUET"
     }
 }
 
@@ -34,18 +38,19 @@ Content-Type: application/json
 ### blood post
 POST {{api_url}}/api/post/blood-post/
 Content-Type: application/json
+authorization: {{token}}
 
 {
    "blood_group":"O+",
-   "amount":2,
+   "amount":1,
    "location":{
-      "display_name":"hi",
+      "display_name":"bye",
       "latitude":15.526,
       "longitude":36.35
    },
    "contact":"235468778965",
    "due_time":"2022-02-20",
-   "additional_info":"{'uuu': 'vvv'}"
+   "additional_info":"{\"text\": \"need emergency\"}"
 }
 
 ### blood post by id
@@ -65,7 +70,7 @@ authorization: {{token}}
 
 {
   "post_id":"ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
-  "text": "alu vaja"
+  "text": "dim vaja"
 }
 
 ### comment get
@@ -74,7 +79,7 @@ Content-Type: application/json
 authorization: {{token}}
 
 
-### comment create
+### post react
 POST {{api_url}}/api/react/post
 Content-Type: application/json
 authorization: {{token}}
@@ -84,7 +89,13 @@ authorization: {{token}}
 }
 
 
-### react get
+###  get react
+
 GET {{api_url}}/api/react/post/ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92
+Content-Type: application/json
+authorization: {{token}}
+
+###  undo react
+DELETE {{api_url}}/api/react/post/ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92
 Content-Type: application/json
 authorization: {{token}}

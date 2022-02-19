@@ -8,7 +8,7 @@ const authRepo = new AuthRepository();
 
 export default class AuthController{
     register = async function (req, res) {
-        console.log(req.body);
+        // console.log(req.body);
         const hashedPassword = await bcyrpt.hash(req.body.password, 10);
         const locationId = uuidv4();
         const userLocation = {
@@ -32,7 +32,6 @@ export default class AuthController{
         if(!locationResult.success){
             return res.status(500).json({code: 500, message: "Internal server error!"})
         }
-        const d = new Date();
         const user = {
             id: uuidv4(),
             location_id: locationId,
@@ -41,15 +40,12 @@ export default class AuthController{
             phone_number: req.body.phone,
             password: hashedPassword,
             blood_group: req.body.bloodGroup,
-            gender: req.body.gender,
-            created: d,
-            updated: d,
-            active: 1
+            gender: req.body.gender
         }
-        
+
 
         const result = await authRepo.insertUser(user, true);
-        console.log(result);
+        // console.log(result);
         if(result.success){
             return res.status(201).json({code: 201, data: result.data});
         }
@@ -60,7 +56,7 @@ export default class AuthController{
         const cred = req.body;
         const email = cred.email;
         const pwd = cred.password;
-        console.log(`user email ${email}`);
+        // console.log(`user email ${email}`);
 
         const result = await authRepo.getUser(email, false);
         //console.log(result);
@@ -75,7 +71,7 @@ export default class AuthController{
                     const user_email = user.EMAIL;
                     const tokenInfo = {id: user_id, name: user_name, email:user_email};
                     const token = generateJwtToken(tokenInfo);
-                    console.log(token);
+                    // console.log(token);
                     return res.status(200).json({code:200, message: "Success", token: token});
                 }
             }

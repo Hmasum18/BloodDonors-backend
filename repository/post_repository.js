@@ -6,7 +6,7 @@ export default class PostRepository{
         let params = Object.values(postInfo);
         const query = `
             insert into post 
-            (${columns}) values(:1, :2, :3, :4, :5, :6, :7)
+            (${columns}) values(:1, :2, :3, :4)
         `
         return await db_query(query, params, autoCommit);
     }

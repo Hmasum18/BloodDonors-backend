@@ -16,9 +16,6 @@ export default class CommentController {
             post_id,
             user_id,
             text,
-            created: date,
-            updated: date,
-            active: 1,
         }
         let result = await commentRepository.create(commentObj, true);
         if (result.success) {

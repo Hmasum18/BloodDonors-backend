@@ -20,19 +20,18 @@ export default async function db_query(query, params, autoCommit){
         })
         console.log("connected to database");
     }
+    let result;
     try{
-        let result = await connection.execute(query, params, {autoCommit: autoCommit,});
-        // console.log(result)
+        result = await connection.execute(query, params, {autoCommit: autoCommit, outFormat: oracledb.OUT_FORMAT_OBJECT });
         return {
 
             success: true,
             data: result.rows,
         };
     }catch(e){
-        console.log(e);
         return {
             success: false,
-            error: e,
+            error: e.message,
         };
     }
 }

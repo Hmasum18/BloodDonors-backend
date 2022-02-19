@@ -7,5 +7,6 @@ const router = Router();
 
 router.post('/post', authenticateToken, postReactController.create)
 router.get('/post/:post_id', authenticateToken, postReactController.getAllReact);
+router.delete('/post/:post_id', authenticateToken, postReactController.deleteReact)
 
 export default router;

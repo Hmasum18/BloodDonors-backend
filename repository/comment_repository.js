@@ -9,7 +9,7 @@ export default class CommentRepository {
             insert into comments
             (${columns})
             values 
-            (:1, :2, :3, :4, :5, :6, :7)
+            (:1, :2, :3, :4)
         `
         return await db_query(query, params, autoCommit);
     }
@@ -24,8 +24,8 @@ export default class CommentRepository {
                 u.id "user_id",
                 u.name "user_name"
             from comments c join users u on (c.user_id = u.id)
-            where c.post_id = :1 
-            order by "created"
+            where c.post_id = :1 and c.active = 1
+            order by c.created desc
         `
         let params = [post_id]
         return await db_query(query, params, autoCommit)

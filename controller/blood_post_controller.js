@@ -16,13 +16,12 @@ export default class BloodPostController{
 
     createPost = async (req, res) => {
 
-        console.log(req.body);
+        // console.log(req.body);
 
         //console.log('creating post', req.body.location);
         //console.log('creating post', req.body.location['latitude']);
-        const current_time = new Date();
 
-        let result = await locationController.checkingExistingLocation(req.body.location.displayName);
+        let result = await locationController.checkingExistingLocation(req.body.location.display_name);
         if(!result.success){
             return res.status(500).json({code: 500, message: "server side problem"});
         }
@@ -30,17 +29,15 @@ export default class BloodPostController{
         let locationInfo;
 
         if(result.data.length === 0) {
-            console.log('inserting location');
+            // console.log('inserting location');
             locationInfo = {
                 id: uuidv4(),
                 latitude: req.body.location.latitude,
                 longitude: req.body.location.longitude,
-                description: req.body.location.displayName ,
-                created: current_time,
-                updated: current_time,
-                active: 1
+                description: req.body.location.display_name ,
             };
             result = await locationRepository.insertOne(locationInfo, false)
+            // console.log('location ', result)
             if (!result.success) {
                 return res.status(500).json({code: 500, message: "server side problem"});
             }
@@ -52,9 +49,6 @@ export default class BloodPostController{
             user_id: req.body.user.id,
             description: null,
             privacy: req.body.privacy ? req.body.privacy : 0, // 0 = no privacy, not 0 = some privacy
-            created: current_time,
-            updated: current_time,
-            active: 1
         }
 
         result = await postRepository.insertOne(generalPostInfo, false);
@@ -133,8 +127,8 @@ export default class BloodPostController{
         const locationResult = await locationRepository.findAll(false);
         let data = bloodPostResult.data.map(x => {
             let locationData = locationResult.data.find(y => objectKeysToLC(y).id === x.location_id);
-            console.log(locationData);
-            console.log(x.location_id, locationData.id)
+            // console.log(locationData);
+            // console.log(x.location_id, locationData.id)
             delete x.location_id;
             return {
                 ...x,

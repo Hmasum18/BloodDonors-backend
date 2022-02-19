@@ -10,7 +10,7 @@ const userRepo = new UserRepository();
 
 export default class UserController{
     getUsers = async function (req, res, next) {
-        console.log("inside user controller getUsers")
+        // console.log("inside user controller getUsers")
         const result = await userRepo.findAll(false);
         if(result.success){
             return res.status(200).json({code: 200, data: result.data});
@@ -19,10 +19,10 @@ export default class UserController{
     }
 
     getUser = async (req, res, next) => {
-        console.log(`${TAG} getUser`)
+        // console.log(`${TAG} getUser`)
 
         var id = req.params.id;
-        console.log(`"user id: ${id}`);
+        // console.log(`"user id: ${id}`);
 
         if(id === undefined){
             id = req.body.user.id;

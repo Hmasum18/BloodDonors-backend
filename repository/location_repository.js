@@ -4,13 +4,13 @@ export default class LocationRepository{
     insertOne = async (location, autoCommit = true) => {
         let columns = Object.keys(location);
         columns = columns.join(', ');
-        console.log(columns);
+        // console.log(columns);
         let params = Object.values(location);
-        console.log(params)
+        // console.log(params)
         const query =  `
             insert into location
             (${columns}) 
-            values(:1, :2, :3, :4, :5, :6, :7)
+            values(:1, :2, :3, :4)
         `;
         return await db_query(query, params, autoCommit);
     }
@@ -38,6 +38,8 @@ export default class LocationRepository{
         const query = `
             select *
             from location
+            where active = 1
+            order by created
         `;
         return await db_query(query, [], autoCommit)
     }
