@@ -13,9 +13,9 @@ POST {{api_url}}/api/auth/register
 Content-Type: application/json
 
 {
-    "name" : "sayem",
-    "email" : "sayem@email.com",
-    "password" : "sayem",
+    "name" : "chill",
+    "email" : "chill@email.com",
+    "password" : "chill",
     "phone": "1234567",
     "bloodGroup" : "AB+",
     "gender": "male",

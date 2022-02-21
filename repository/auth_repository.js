@@ -1,4 +1,5 @@
 import db_query from "../database/oracle_db.js";
+import {generateParams} from "../utils/db_params.js";
 
 export default class AuthRepository{
     /* insertUser = async function (id, name, email, password, role) {
@@ -24,9 +25,10 @@ export default class AuthRepository{
         // console.log(`inserting ${user.id} ${user.name}, ${user.email}, ${user.phone}`);
         const columns = Object.keys(user).join(', ');
         const params = Object.values(user);
+        const param_place = generateParams(params.length);
         const query =  `insert into "USERS" 
         (${columns}) 
-        values(:1, :2, :3, :4, :5, :6, :7, :8)`;
+        values(${param_place})`;
         return await db_query(query, params, autoCommit);
     }
 
