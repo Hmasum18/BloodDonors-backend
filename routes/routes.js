@@ -5,6 +5,7 @@ import postRouter from "./post_routes.js"
 import commentRouter from "./comment_routes.js"
 import reactRouter from "./react_routes.js"
 import messageRouter from "./message_routes.js"
+import donationRouter from "./donation_routes.js"
 
 const router = PromiseRouter();
 
@@ -14,6 +15,7 @@ router.use("/post", postRouter);
 router.use("/comment", commentRouter);
 router.use("/react", reactRouter);
 router.use("/message", messageRouter);
+router.use("/donation", donationRouter);
 
 export default router;
 
