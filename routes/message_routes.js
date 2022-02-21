@@ -8,5 +8,6 @@ const router = Router();
 
 
 router.get("/:id",authenticateToken, messageController.getAllMessage);
+router.get("/",authenticateToken, messageController.getChatList);
 
 export default router;

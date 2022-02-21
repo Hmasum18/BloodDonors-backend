@@ -35,4 +35,35 @@ export default class MessageRepository {
         let params = [obj.user_id, obj.friend_id, obj.friend_id, obj.user_id]
         return await db_query(query, params, autoCommit)
     }
+
+    async getChatList(user_id, autoCommit = true) {
+
+        let query = `
+            select
+                m.SENDER_ID sender_id, 
+                m.RECEIVER_ID receiver_id, 
+                m.text text, 
+                c.CHATS, 
+                c.LAST_CHAT_TIME sent_time, 
+                u.name name, 
+                u.id user_id
+            from message m join 
+            (
+                select 
+                    c.chats chats,
+                    max(c.last_chat_time) last_chat_time
+                from
+                (
+                    select receiver_id chats, max(sent_time) last_chat_time from message where sender_id = :1 and active = 1 group by receiver_id
+                    union 
+                    select sender_id chats, max(sent_time) last_chat_time from message where receiver_id = :2 and active = 1 group by sender_id
+    
+                ) c 
+                group by c.chats
+            ) c on ((m.receiver_id = c.chats or m.sender_id = c.chats)  and c.LAST_CHAT_TIME = m.SENT_TIME) join users u on (u.id = c.chats)
+            order by c.last_chat_time desc
+        `
+        let params = [user_id, user_id]
+        return await db_query(query, params, autoCommit)
+    }
 }

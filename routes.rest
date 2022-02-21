@@ -31,8 +31,8 @@ POST {{api_url}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email" : "pepsi@email.com",
-    "password" : "pepsi"
+    "email" : "m",
+    "password" : "masum123"
 }
 
 ### blood post
@@ -70,7 +70,7 @@ authorization: {{token}}
 
 {
   "post_id":"ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
-  "text": "dim vaja"
+  "text": "what happened"
 }
 
 ### comment get
@@ -105,3 +105,23 @@ authorization: {{token}}
 GET {{api_url}}/api/message/e4c78117-4493-4d2d-a3a1-6f21306d897e
 Content-Type: application/json
 authorization: {{token}}
+
+
+### get chat list
+GET {{api_url}}/api/message
+Content-Type: application/json
+authorization: {{token}}
+
+### create donation
+POST {{api_url}}/api/donation
+Content-Type: application/json
+authorization: {{token}}
+
+{
+  "location":{
+    "display_name":"bye",
+    "latitude":15.526,
+    "longitude":36.35
+  },
+  "donation_time": "2022-02-20"
+}
