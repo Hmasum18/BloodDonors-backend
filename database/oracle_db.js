@@ -22,13 +22,15 @@ export default async function db_query(query, params, autoCommit){
     }
     let result;
     try{
-        result = await connection.execute(query, params, {autoCommit: autoCommit, outFormat: oracledb.OUT_FORMAT_OBJECT });
+        result = await connection.execute(query, params, {autoCommit: autoCommit});
+        // console.log(result);
         return {
 
             success: true,
             data: result.rows,
         };
     }catch(e){
+        // console.log(e.message)
         return {
             success: false,
             error: e.message,

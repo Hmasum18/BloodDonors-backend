@@ -31,7 +31,7 @@ export default class BloodPostRepository{
                 U.name "user_name",
                 BP.location_id "location_id"
             from blood_post BP join post P on(BP.post_id = P.id) join users U on (P.user_id = U.id)
-            where BP.post_id = '${id}'
+            where BP.post_id = '${id}' and P.active = 1
         `
 
         return await db_query(query, [], autoCommit);
