@@ -29,7 +29,7 @@ export default class MessageRepository {
                 select * from message where (sender_id = :1 and receiver_id = :2) or (sender_id =: 3 and receiver_id = :4)
             ) m join users s on (m.sender_id = s.id) join users r on (m.receiver_id = r.id)
             where m.active = 1
-            order by m.sent_time asc
+            order by m.sent_time desc
         `
         let params = [obj.user_id, obj.friend_id, obj.friend_id, obj.user_id]
         return await db_query(query, params, autoCommit)

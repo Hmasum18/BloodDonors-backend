@@ -17,19 +17,16 @@ export default class DonationRepository {
         return await db_query(query, params, autoCommit);
     }
 
-    async getAllReact(post_id, autoCommit = true) {
+    async findDonationByID(donation_id, autoCommit = false) {
         let query = `
             select 
-                pr.react_name "react_name",
-                pr.post_id "post_id",
-                pr.created "created",
-                u.id "user_id",
-                u.name "user_name"
-            from post_react pr join users u on (pr.user_id = u.id)
-            where pr.post_id = :1 and pr.active = 1
-            order by "created"
+                d.donation_time "donation_time",
+                l.latitude "latitude",
+                l.longitude "longitude",
+                l.description "display_name"
+            from donation d join location l on (d.location_id = l.id)
+            where d.id = :donation_id and d.active = 1
         `
-        let params = [post_id, ]
-        return await db_query(query, params, autoCommit);
+        return await db_query(query, {donation_id}, autoCommit);
     }
 }

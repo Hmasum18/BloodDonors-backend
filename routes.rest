@@ -1,3 +1,7 @@
+### test
+GET {{api_url}}/api/test
+
+
 ### fetch all users
 GET {{api_url}}/api/user HTTP/1.1
 Content-Type: application/json
@@ -136,3 +140,12 @@ authorization: {{token}}
 GET {{api_url}}/api/notification
 Content-Type: application/json
 authorization: {{token}}
+
+### donation post create
+POST {{api_url}}/api/post/donation-post
+Content-Type: application/json
+authorization: {{token}}
+
+{
+  "donation_id": "b96155cf-98d3-4854-995b-b0d30e63a4a5"
+}
