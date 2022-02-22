@@ -20,9 +20,9 @@ export default class UserController{
 
     searchUserByName = async function (req, res, next) {
         let filterString = req.params.filter_string;
-        console.log(filterString)
+        // console.log(filterString)
         const result = await userRepo.findByName(filterString, false);
-        console.log(result)
+        // console.log(result)
         if(result.success){
             return res.status(200).json({code: 200, data: result.data});
         }

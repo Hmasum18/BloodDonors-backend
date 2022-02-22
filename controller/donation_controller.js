@@ -48,7 +48,7 @@ export default class DonationController{
         }
 
         result = await  donationRepository.create(donation_obj, true);
-        console.log(result);
+        // console.log(result);
         if(result.success)
         {
             return res.status(200).json({code: 200, message: 'donation added', data: {... donation_obj, created: new Date().toISOString()}})

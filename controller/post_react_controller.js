@@ -71,7 +71,7 @@ export default class PostReactController {
         let post_id = req.params.post_id;
         let user_id = req.body.user.id;
         let result = await postReactRepository.delete({post_id, user_id}, true);
-        console.log(result);
+        // console.log(result);
         if (result.success) {
             return res.status(202).json({code: 202, message: 'react removed'})
         }

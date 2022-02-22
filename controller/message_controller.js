@@ -31,9 +31,9 @@ export default class MessageController {
     getChatList = async (req, res) => {
         let user_id = req.body.user.id;
         let user_name = req.body.user.name;
-        console.log(user_id);
+        // console.log(user_id);
         let result = await  messageRepository.getChatList(user_id, false);
-        console.log(result);
+        // console.log(result);
         let responseData = result.data.map(x => {
             x = objectKeysToLC(x);
             let is_sender = user_id === x.sender_id
@@ -52,7 +52,7 @@ export default class MessageController {
                 is_sender
             }
         })
-        console.log(responseData);
+        // console.log(responseData);
         if(result.success)
         {
             return res.status(200).json({code: 200, message: 'retrieved all messages', data: responseData})
