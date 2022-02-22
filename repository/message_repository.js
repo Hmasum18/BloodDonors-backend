@@ -22,9 +22,8 @@ export default class MessageRepository {
                 r.name "receiver",
                 r.id "receiver_id",
                 m.text "message",
-                m.sent_time,
-                m.seen_time,
-                m.created
+                m.sent_time "sent_time",
+                m.seen_time "seen_time"
             from
             (
                 select * from message where (sender_id = :1 and receiver_id = :2) or (sender_id =: 3 and receiver_id = :4)
