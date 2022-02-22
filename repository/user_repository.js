@@ -2,7 +2,7 @@
  * Repository get user related data from database
  * and then returns the data to controller
  */
-import {db_query} from "../database/oracle_db.js";
+import {db_proc, db_query} from "../database/oracle_db.js";
 const TAG = "user_controlller.js->";
 
 export default class UserRepository{
@@ -11,6 +11,14 @@ export default class UserRepository{
         // console.log("inside findAll")
         const query = `SELECT * FROM users where active = 1 order by created`;
         return await db_query(query, [], autoCommit);
+    }
+
+    findByName = async function (filterString, autoCommit = true){
+        // console.log("inside findAll")
+        const query = `begin
+            get_User_by_name(:filterString, :y); 
+        end;`;
+        return await db_proc(query, {filterString}, autoCommit);
     }
 
     findOne = async function (id, autoCommit = true) {

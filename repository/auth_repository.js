@@ -43,13 +43,12 @@ export default class AuthRepository{
     }
 
     getUser = async function (email, autoCommit = true) {
-        let q = `
+        let query = `
         begin 
             get_user(:email, :y); 
         end;`
-        let r = await db_proc(q, {email}, false)
         // console.log(r);
-        return r;
+        return await db_proc(query, {email}, false);
         // const query =  `select * from "USERS" where "EMAIL" = :1`;
         // return await db_query(query, [email], autoCommit);
     }

@@ -8,6 +8,11 @@ GET {{api_url}}/api/user/d9d5330c-62a3-427e-9aad-a749a29eceeb HTTP/1.1
 Content-Type: application/json
 authorization: {{token}}
 
+### fetch user with name
+GET {{api_url}}/api/user/search/b HTTP/1.1
+Content-Type: application/json
+authorization: {{token}}
+
 ### register
 POST {{api_url}}/api/auth/register
 Content-Type: application/json
@@ -125,3 +130,9 @@ authorization: {{token}}
   },
   "donation_time": "2022-02-20"
 }
+
+
+### get all notification
+GET {{api_url}}/api/notification
+Content-Type: application/json
+authorization: {{token}}
