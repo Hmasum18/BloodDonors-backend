@@ -31,8 +31,21 @@ export default class UserController{
         // console.log(filterString)
         const result = await userRepo.searchByBG(bloodGroup, false);
         // console.log(result)
+
         if(result.success){
-            return res.status(200).json({code: 200, data: result.data});
+            let responseData = result.data.map(x => {
+                let y = {
+                    ...x,
+                    location: {
+                        latitude: x.latitude,
+                        longitude: x.longitude,
+                        description: x.description,
+                    }
+                };
+                ['latitude', 'longitude', 'description'].forEach(e => delete y[x])
+                return y;
+            });
+            return res.status(200).json({code: 200, data: responseData});
         }
         return res.status(500).json({code: 500, error: "Internal server error"})
     }

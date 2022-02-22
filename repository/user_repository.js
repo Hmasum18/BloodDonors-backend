@@ -36,7 +36,17 @@ export default class UserRepository{
     searchByBG = async function (blood_group, autoCommit = false) {
         // console.log(`${TAG} findUserLocation`)
         blood_group = blood_group.toLowerCase();
-        const query =  `SELECT * FROM users WHERE lower(blood_group) = :blood_group`;
+        const query =  `SELECT 
+                u.name "name",
+                u.id "id",
+                u.email "email",
+                u.phone_number "phone",
+                u.blood_group "blood_group",
+                u.gender "gender",
+                l.latitude "latitude",
+                l.longitude "longitude",
+                l.description "description"
+            FROM users u join location l on(u.location_id = l.id) WHERE lower(u.blood_group) = :blood_group and u.active = 1`;
         return await db_query(query, {blood_group}, autoCommit);
     }
 }
