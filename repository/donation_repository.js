@@ -1,4 +1,4 @@
-import db_query from "../database/oracle_db.js";
+import {db_query} from "../database/oracle_db.js";
 import {generateParams} from "../utils/db_params.js";
 
 export default class DonationRepository {

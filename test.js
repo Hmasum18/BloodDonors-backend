@@ -1,4 +1,4 @@
-// import db_query from "./database/oracle_db";
+// import {db_query} from "./database/oracle_db";
 
 let entity = ['comment', 'post', 'blood post']
 let action = ['created', 'updated', 'reacted']

@@ -1,4 +1,4 @@
-import db_query from "../database/oracle_db.js";
+import {db_query} from "../database/oracle_db.js";
 
 export default class PostReactRepository {
 

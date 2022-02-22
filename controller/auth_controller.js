@@ -18,13 +18,10 @@ export default class AuthController{
             text: req.body.location.display_name,
         }
 
-        const emailCheck = await authRepo.getUser(req.body.email, false);
-        if(emailCheck.success){
-            if(emailCheck.data.length >= 1){
-                //const user = result.data[0];
-                //console.log(`bal ${user.PASSWORD}`)
-                return res.status(409).json({code:409, message: "This email has already been used."})
-            }
+        const emailCheck = await authRepo.checkUser(req.body.email, false);
+        // console.log('emailcheck', emailCheck.data[0].flag)
+        if(emailCheck.data[0].flag){
+            return res.status(409).json({code:409, message: "This email has already been used."})
         }
 
         const locationResult = await authRepo.insertUserLocation(userLocation, false);

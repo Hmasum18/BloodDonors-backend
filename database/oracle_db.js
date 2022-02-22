@@ -10,7 +10,7 @@ oracledb.fetchAsString = [ oracledb.CLOB ];
 var connection = undefined;
 
 // default can be imported as import db_query from "./database/oracle_db.js"
-export default async function db_query(query, params, autoCommit){
+export async function db_query(query, params, autoCommit){
     console.log("inside db query")
     if(connection === undefined){
         connection = await oracledb.getConnection({
@@ -22,15 +22,51 @@ export default async function db_query(query, params, autoCommit){
     }
     let result;
     try{
-        result = await connection.execute(query, params, {autoCommit: autoCommit});
-        // console.log(result);
+        result = await connection.execute(query, params, {autoCommit: autoCommit, });
+        // console.log('result', result);
         return {
 
             success: true,
             data: result.rows,
         };
     }catch(e){
-        // console.log(e.message)
+        // console.log('e', e.message)
+        return {
+            success: false,
+            error: e.message,
+        };
+    }
+}
+
+export async function db_proc(query, params, autoCommit){
+    console.log("inside db query")
+    if(connection === undefined){
+        connection = await oracledb.getConnection({
+            user: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            connectString: process.env.DB_CONNECTION_STRING
+        })
+        console.log("connected to database");
+    }
+    let result;
+    try{
+        let x = {
+            ...params,
+            y: {dir: oracledb.BIND_OUT, type: oracledb.CURSOR}
+        };
+        result = await connection.execute(query, x, {autoCommit: autoCommit, });
+        let resultSet = result.outBinds.y;
+        let row, rows = [];
+        while ((row = await resultSet.getRow())) {
+            rows.push(row);
+        }
+        await resultSet.close();
+        return {
+            success: true,
+            data: rows,
+        };
+    }catch(e){
+        console.log('e', e.message)
         return {
             success: false,
             error: e.message,

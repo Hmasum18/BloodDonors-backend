@@ -1,4 +1,4 @@
-import db_query from "../database/oracle_db.js";
+import {db_proc, db_query} from "../database/oracle_db.js";
 import {generateParams} from "../utils/db_params.js";
 
 export default class AuthRepository{
@@ -32,10 +32,26 @@ export default class AuthRepository{
         return await db_query(query, params, autoCommit);
     }
 
-    getUser = async function (email, autoCommit = true) {
+    checkUser = async function (email, autoCommit = true) {
         // console.log(`checking ${email}`);
-        const query =  `select * from "USERS" where "EMAIL" = :1`;
+        // const query =  `select * from "USERS" where "EMAIL" = :1`;
+        // let q = `call hello()`
+        // await db_query(q, [], false)
+        // console.log(email);
+        const query =  `select email_check(:1) "flag" from dual`;
         return await db_query(query, [email], autoCommit);
+    }
+
+    getUser = async function (email, autoCommit = true) {
+        let q = `
+        begin 
+            get_user(:email, :y); 
+        end;`
+        let r = await db_proc(q, {email}, false)
+        // console.log(r);
+        return r;
+        // const query =  `select * from "USERS" where "EMAIL" = :1`;
+        // return await db_query(query, [email], autoCommit);
     }
 }
 

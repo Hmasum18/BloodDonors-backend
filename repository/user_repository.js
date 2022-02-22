@@ -2,7 +2,7 @@
  * Repository get user related data from database
  * and then returns the data to controller
  */
-import db_query from "../database/oracle_db.js";
+import {db_query} from "../database/oracle_db.js";
 const TAG = "user_controlller.js->";
 
 export default class UserRepository{
