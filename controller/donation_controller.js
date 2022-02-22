@@ -70,7 +70,7 @@ export default class DonationController {
         // console.log(result)
         if (result.success) {
             let responseData = locationController.retriveLocationFromObject(result.data)
-            return res.status(201).json({code: 201, message: 'donations retrieved', data: responseData})
+            return res.status(200).json({code: 200, message: 'donations retrieved', data: responseData})
         }
         return res.status(500).json({code: 500, message: 'server side problem'})
     }
