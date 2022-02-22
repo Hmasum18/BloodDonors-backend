@@ -50,18 +50,16 @@ export function messageSocket(app, port){
         });
 
         socket.on(SEND_MESSAGE, async function (data) {
-            // console.log(`received message:`, data);
-            // socket.broadcast.emit(RECEIVE_MESSAGE, data);
-            const senderId = data.sender_id;
+            console.log(`received message:`, data);
             await messageController.insertMessage(data);
             //onlineUsersScoketMap[senderId] = socket.id;
             if (data.receiver_id !== undefined) {
                 const receiverSocketId = userIdSocketMap[data.receiver_id];
-                // console.log("receiver", data.receiver_id, receiverSocketId);
+                console.log("sender:", data.sender_id, "socketId", userIdSocketMap[data.sender_id]);
+                console.log("receiver:", data.receiver_id, "socketId", receiverSocketId);
                 if (receiverSocketId !== undefined)
                     io.to(receiverSocketId).emit(RECEIVE_MESSAGE, data); //https://socket.io/docs/v3/emit-cheatsheet/
             }
-
         });
     });
 }
