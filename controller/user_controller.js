@@ -1,9 +1,11 @@
 import UserRepository from "../repository/user_repository.js"
 import {objectKeysToLC} from "../utils/key_to_lowercase.js";
 import DonationRepository from "../repository/donation_repository.js";
+import LocationController from "./location_controller.js";
 
 const userRepo = new UserRepository();
 const donationRepository = new DonationRepository();
+const locationController = new LocationController();
 
 export default class UserController{
     getUsers = async function (req, res, next) {
@@ -33,18 +35,7 @@ export default class UserController{
         // console.log(result)
 
         if(result.success){
-            let responseData = result.data.map(x => {
-                let y = {
-                    ...x,
-                    location: {
-                        latitude: x.latitude,
-                        longitude: x.longitude,
-                        description: x.description,
-                    }
-                };
-                ['latitude', 'longitude', 'description'].forEach(e => delete y[x])
-                return y;
-            });
+            let responseData = locationController.retriveLocationFromObject(result.data)
             return res.status(200).json({code: 200, data: responseData});
         }
         return res.status(500).json({code: 500, error: "Internal server error"})

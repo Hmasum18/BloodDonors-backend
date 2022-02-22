@@ -37,4 +37,23 @@ export default class DonationRepository {
         `
         return await db_query(query, {user_id}, autoCommit);
     }
+
+    getUserDonation = async (user_id, autoCommit = false) => {
+        const query = `
+            select 
+                u.id "user_id",
+                u.name "user_name",
+                d.created "created",
+                d.donation_time "donation_time",
+                l.latitude "latitude",
+                l.longitude "longitude",
+                l.description "description"
+                
+            from  
+                (select * from donation where user_id = :user_id and active = 1) d join users u on (d.user_id = u.id) 
+                join location l on (d.location_id = l.id)
+            order by d.donation_time desc
+        `
+        return await db_query(query, {user_id}, autoCommit);
+    }
 }

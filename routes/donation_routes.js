@@ -6,6 +6,7 @@ const donationController = new DonationController()
 const router = Router();
 
 router.post('/', authenticateToken, donationController.create)
+router.get('/:id', authenticateToken, donationController.getUserDonation)
 // router.get('/:post_id', authenticateToken, donationController.getAllComment);
 
 export default router;

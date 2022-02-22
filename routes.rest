@@ -142,7 +142,7 @@ authorization: {{token}}
     "latitude":15.526,
     "longitude":36.35
   },
-  "donation_time": "2022-02-20"
+  "donation_time": "2022-02-21"
 }
 
 
@@ -159,3 +159,8 @@ authorization: {{token}}
 {
   "donation_id": "b96155cf-98d3-4854-995b-b0d30e63a4a5"
 }
+
+### user donations get
+GET {{api_url}}/api/donation/33ab3559-4cc1-48d5-a005-1cbf9b0f3922
+Content-Type: application/json
+authorization: {{token}}

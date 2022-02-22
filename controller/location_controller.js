@@ -16,5 +16,19 @@ export default class LocationController {
         return result;
     }
 
+    retriveLocationFromObject = (arr) => {
+        return arr.map(x => {
+            let y = {
+                ...x,
+                location: {
+                    latitude: x.latitude,
+                    longitude: x.longitude,
+                    description: x.description,
+                }
+            };
+            ['latitude', 'longitude', 'description'].forEach(e => delete y[e])
+            return y;
+        });
+    }
 
 }
