@@ -29,4 +29,12 @@ export default class DonationRepository {
         `
         return await db_query(query, {donation_id}, autoCommit);
     }
+
+    getLastDonation = async (user_id, autoCommit = false) => {
+        const query = `
+            select max(donation_time) "last_donation"
+            from donation where user_id = :user_id and active = 1
+        `
+        return await db_query(query, {user_id}, autoCommit);
+    }
 }

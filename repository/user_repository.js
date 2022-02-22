@@ -22,7 +22,7 @@ export default class UserRepository{
     }
 
     findOne = async function (id, autoCommit = true) {
-        const query = `SELECT * from "USERS" where "ID"=:1`;
+        const query = `SELECT * from "USERS" where "ID"=:1 and active = 1`;
         return await db_query(query, [id], autoCommit);
     }
 

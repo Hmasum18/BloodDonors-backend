@@ -44,7 +44,7 @@ export default class DonationPostController {
                 created: new Date().toISOString(),
                 donation_time: donation_location.donation_time,
                 location: {
-                    display_name: donation_location.display_name,
+                    description: donation_location.display_name,
                     latitude: donation_location.latitude,
                     longitude: donation_location.longitude,
                 }

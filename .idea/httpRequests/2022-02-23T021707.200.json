@@ -1,0 +1,19 @@
+{
+  "code": 200,
+  "data": {
+    "id": "33ab3559-4cc1-48d5-a005-1cbf9b0f3922",
+    "name": "pepsi",
+    "email": "pepsi@email.com",
+    "phone_number": "1234567",
+    "blood_group": "AB+",
+    "created": "2022-02-18T14:47:15.000Z",
+    "gender": "male",
+    "location": {
+      "latitude": 23.7258109,
+      "longitude": 90.3908448,
+      "description": "Titumir Hall, BUET"
+    },
+    "available": false,
+    "last_donation": "2022-02-20T00:00:00.000Z"
+  }
+}
