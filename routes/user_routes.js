@@ -21,5 +21,6 @@ router.get("/",authenticateToken, userController.getUsers);
 router.get("/me", authenticateToken, userController.getUser);
 router.get("/:id",authenticateToken, userController.getUser);
 router.get("/search/:filter_string", authenticateToken, userController.searchUserByName);
+router.get("/search-bg/:blood_group", authenticateToken, userController.searchByBG);
 
 export default router;

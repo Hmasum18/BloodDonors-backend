@@ -17,6 +17,11 @@ GET {{api_url}}/api/user/search/b HTTP/1.1
 Content-Type: application/json
 authorization: {{token}}
 
+### fetch user with bg
+GET {{api_url}}/api/user/search-bg/Ab+ HTTP/1.1
+Content-Type: application/json
+authorization: {{token}}
+
 ### register
 POST {{api_url}}/api/auth/register
 Content-Type: application/json

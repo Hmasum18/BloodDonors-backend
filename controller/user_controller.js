@@ -29,6 +29,17 @@ export default class UserController{
         return res.status(500).json({code: 500, error: "Internal server error"})
     }
 
+    searchByBG = async function (req, res, next) {
+        let bloodGroup = req.params.blood_group;
+        // console.log(filterString)
+        const result = await userRepo.searchByBG(bloodGroup, false);
+        // console.log(result)
+        if(result.success){
+            return res.status(200).json({code: 200, data: result.data});
+        }
+        return res.status(500).json({code: 500, error: "Internal server error"})
+    }
+
     getUser = async (req, res, next) => {
         // console.log(`${TAG} getUser`)
 

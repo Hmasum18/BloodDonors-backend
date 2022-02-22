@@ -26,11 +26,18 @@ export default class UserRepository{
         return await db_query(query, [id], autoCommit);
     }
 
-    findUserLocation = async function (location_id, autoCommit = true) {
+    findUserLocation = async function (location_id, autoCommit = false) {
         // console.log(`${TAG} findUserLocation`)
         const binds = {locationID: location_id};
         const query =  `SELECT * FROM "LOCATION" WHERE ID= :locationID`;
         return await db_query(query, binds, autoCommit);
+    }
+
+    searchByBG = async function (blood_group, autoCommit = false) {
+        // console.log(`${TAG} findUserLocation`)
+        blood_group = blood_group.toLowerCase();
+        const query =  `SELECT * FROM users WHERE lower(blood_group) = :blood_group`;
+        return await db_query(query, {blood_group}, autoCommit);
     }
 }
 
