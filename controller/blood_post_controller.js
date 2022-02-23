@@ -139,6 +139,28 @@ export default class BloodPostController{
         return res.status(200).json({code: 200, message: `total count: ${data.length}`, data});
     }
 
+    getAllBloodPostOfUser = async (req, res) => {
+        let user_id = req.body.user.id;
+        const bloodPostResult = await bloodPostRepository.findAllByUser(user_id, false);
+        // console.log(bloodPostResult);
+        if(!bloodPostResult.success){
+            return res.status(500).json({code: 500, message: "server side problem"})
+        }
+        const locationResult = await locationRepository.findAll(false);
+        let data = bloodPostResult.data.map(x => {
+            let locationData = locationResult.data.find(y => objectKeysToLC(y).id === x.location_id);
+            // console.log(locationData);
+            // console.log(x.location_id, locationData.id)
+            delete x.location_id;
+            return {
+                ...x,
+                location: objectKeysToLC(locationData)
+            }
+
+        })
+        return res.status(200).json({code: 200, message: `total count: ${data.length}`, data});
+    }
+
     deletePost = async (req, res) => {
         let post_id = req.params.id;
         let user_id = req.body.user.id;

@@ -56,5 +56,25 @@ export default class BloodPostRepository{
         `
         return await db_query(query, [], autoCommit);
     }
+
+    async findAllByUser(user_id, autoCommit = true) {
+        const query = `
+            select
+                BP.post_id "post_id",
+                BP.blood_group "blood_group",
+                BP.amount "amount",
+                BP.contact "contact",
+                BP.due_time "due_time",
+                BP.additional_info "additional_info",
+                P.created "created",
+                U.id "user_id",
+                U.name "user_name",
+                BP.location_id "location_id"
+            from blood_post BP join (select * from post where user_id = :user_id) P on(BP.post_id = P.id) join users U on (P.user_id = U.id)
+            where P.active = 1
+            order by P.created desc
+        `
+        return await db_query(query, {user_id}, autoCommit);
+    }
 }
 

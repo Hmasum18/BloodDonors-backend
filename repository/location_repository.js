@@ -36,7 +36,11 @@ export default class LocationRepository{
 
     async findAll(autoCommit = true) {
         const query = `
-            select *
+            select 
+                id "id",
+                latitude "latitude",
+                longitude "longitude",
+                description "description"
             from location
             where active = 1
             order by created

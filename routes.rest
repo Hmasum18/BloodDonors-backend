@@ -174,3 +174,8 @@ authorization: {{token}}
 DELETE {{api_url}}/api/comment/55eb592a-97e0-4656-a632-24082e334973
 Content-Type: application/json
 authorization: {{token}}
+
+### get all blood post of user
+GET {{api_url}}/api/post/blood-post/me
+Content-Type: application/json
+authorization: {{token}}
