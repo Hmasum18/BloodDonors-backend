@@ -139,5 +139,16 @@ export default class BloodPostController{
         return res.status(200).json({code: 200, message: `total count: ${data.length}`, data});
     }
 
+    deletePost = async (req, res) => {
+        let post_id = req.params.id;
+        let user_id = req.body.user.id;
+        const result = await postRepository.deletePost({post_id, user_id});
+        // console.log(result);
+        if (result.success) {
+            return res.status(202).json({code: 202, message: result.data[0].message})
+        }
+        return res.status(500).json({code: 500, message: 'server side problem'})
+    }
+
 
 }

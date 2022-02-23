@@ -7,5 +7,6 @@ const router = Router();
 router.post("/", authenticateToken, bloodPostController.createPost);
 router.get("/:post_id", authenticateToken, bloodPostController.getBloodPostById);
 router.get("/", authenticateToken, bloodPostController.getAllBloodPost);
+router.delete("/:id", authenticateToken, bloodPostController.deletePost);
 
 export default router;

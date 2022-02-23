@@ -22,7 +22,7 @@ export default class DonationPostController {
         if(!result.success){
             return res.status(500).json({code: 500, message: "server side problem"});
         }
-        console.log(1, result);
+        // console.log(1, result);
 
         let donationPostObj = {
             donation_id: req.body.donation_id,
@@ -31,7 +31,7 @@ export default class DonationPostController {
 
 
         result = await donationPostRepository.create(donationPostObj);
-        console.log(2, result);
+        // console.log(2, result);
         if (result.success) {
             let donation_location = await donationRepository.findDonationByID(donationPostObj.donation_id);
             console.log(donation_location)

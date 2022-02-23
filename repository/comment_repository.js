@@ -1,4 +1,4 @@
-import {db_query} from "../database/oracle_db.js";
+import {db_proc, db_query} from "../database/oracle_db.js";
 
 export default class CommentRepository {
 
@@ -29,5 +29,17 @@ export default class CommentRepository {
         `
         let params = [post_id]
         return await db_query(query, params, autoCommit)
+    }
+
+
+    async deleteComment(obj, autoCommit = true) {
+        // console.log(obj);
+        const query = `
+            begin
+                delete_comment(:comment_id, :user_id, :y);
+            end;    
+        `
+        // console.log(query)
+        return await db_proc(query, obj, autoCommit)
     }
 }

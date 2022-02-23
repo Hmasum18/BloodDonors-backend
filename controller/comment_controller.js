@@ -42,5 +42,16 @@ export default class CommentController {
         return res.status(500).json({code: 500, message: 'server side problem'})
     }
 
+    deleteComment = async (req, res) => {
+        let comment_id = req.params.comment_id;
+        let user_id = req.body.user.id;
+        const result = await commentRepository.deleteComment({comment_id, user_id});
+        // console.log(result);
+        if (result.success) {
+            return res.status(202).json({code: 202, message: result.data[0].message})
+        }
+        return res.status(500).json({code: 500, message: 'server side problem'})
+    }
+
 
 }

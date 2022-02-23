@@ -50,7 +50,7 @@ export default class DonationController {
         }
 
         result = await donationRepository.create(donation_obj, true);
-        console.log(result);
+        // console.log(result);
         if (result.success) {
             ['id', 'created', 'updated', 'active'].forEach(e => delete locationInfo[e])
             let responseData = {

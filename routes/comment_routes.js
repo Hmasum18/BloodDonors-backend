@@ -7,5 +7,6 @@ const router = Router();
 
 router.post('/', authenticateToken, commentController.create)
 router.get('/:post_id', authenticateToken, commentController.getAllComment);
+router.delete('/:comment_id', authenticateToken, commentController.deleteComment);
 
 export default router;

@@ -1,4 +1,4 @@
-import {db_query} from "../database/oracle_db.js";
+import {db_proc, db_query} from "../database/oracle_db.js";
 
 export default class PostRepository{
     insertOne = async (postInfo, autoCommit = true) => {
@@ -18,6 +18,16 @@ export default class PostRepository{
         `
 
         return await db_query(query, [], autoCommit);
+    }
+
+    async deletePost(obj, autoCommit = true) {
+        // console.log(obj);
+        const query = `
+            begin
+                delete_post(:post_id, :user_id, :y);
+            end;    
+        `
+        return await db_proc(query, obj, autoCommit)
     }
 }
 
