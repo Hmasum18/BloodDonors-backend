@@ -33,6 +33,18 @@ export default class UserRepository{
         return await db_query(query, binds, autoCommit);
     }
 
+    findLocationOfUser = async (user_id, autoCommit = false) => {
+        const query = `
+            select 
+                l.id "id",
+                l.latitude "latitude",
+                l.longitude "longitude",
+                l.description "description"
+            from (select * from users where id = :user_id) u join location l on (u.location_id = l.id)
+        `
+        return await db_query(query, {user_id}, autoCommit);
+    }
+
     searchByBG = async function (blood_group, autoCommit = false) {
         // console.log(`${TAG} findUserLocation`)
         blood_group = blood_group.toLowerCase();

@@ -3,20 +3,49 @@ import AuthRepository from "../repository/auth_repository.js";
 import bcyrpt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid'
 import {generateJwtToken} from "../utils/jwt_util.js";
+import {objectKeysToLC} from "../utils/key_to_lowercase.js";
+import LocationController from "./location_controller.js";
+import LocationRepository from "../repository/location_repository.js";
 
 const authRepo = new AuthRepository();
+const locationController = new LocationController();
+const locationRepository = new LocationRepository();
 
 export default class AuthController{
     register = async function (req, res) {
         // console.log(req.body);
         const hashedPassword = await bcyrpt.hash(req.body.password, 10);
-        const locationId = uuidv4();
-        const userLocation = {
-            id: locationId,
-            lat: req.body.location.latitude,
-            lang: req.body.location.longitude,
-            text: req.body.location.display_name,
+        let result = await locationController.checkingExistingLocation(req.body.location.display_name);
+        if(!result.success){
+            return res.status(500).json({code: 500, message: "server side problem"});
         }
+
+        let userLocation;
+
+        if(result.data.length === 0) {
+            // console.log('inserting location');
+            userLocation = {
+                id: uuidv4(),
+                latitude: req.body.location.latitude,
+                longitude: req.body.location.longitude,
+                description: req.body.location.display_name ,
+            };
+            result = await locationRepository.insertOne(userLocation, false)
+            // console.log('location ', result)
+            if (!result.success) {
+                return res.status(500).json({code: 500, message: "server side problem"});
+            }
+        }else
+            userLocation = objectKeysToLC(result.data[0]);
+        ['created', 'updated', 'active'].forEach(e => delete userLocation[e])
+        console.log(userLocation);
+        // const locationId = uuidv4();
+        // userLocation = {
+        //     id: locationId,
+        //     lat: req.body.location.latitude,
+        //     lang: req.body.location.longitude,
+        //     text: req.body.location.display_name,
+        // }
 
         const emailCheck = await authRepo.checkUser(req.body.email, false);
         // console.log('emailcheck', emailCheck.data[0].flag)
@@ -24,14 +53,14 @@ export default class AuthController{
             return res.status(409).json({code:409, message: "This email has already been used."})
         }
 
-        const locationResult = await authRepo.insertUserLocation(userLocation, false);
+        // const locationResult = await authRepo.insertUserLocation(userLocation, false);
         
-        if(!locationResult.success){
-            return res.status(500).json({code: 500, message: "Internal server error!"})
-        }
+        // if(!locationResult.success){
+        //     return res.status(500).json({code: 500, message: "Internal server error!"})
+        // }
         const user = {
             id: uuidv4(),
-            location_id: locationId,
+            location_id: userLocation.id,
             name: req.body.name,
             email: req.body.email,
             phone_number: req.body.phone,
@@ -41,7 +70,7 @@ export default class AuthController{
         }
 
 
-        const result = await authRepo.insertUser(user, true);
+        result = await authRepo.insertUser(user, true);
         // console.log(result);
         if(result.success){
             return res.status(201).json({code: 201, data: result.data});

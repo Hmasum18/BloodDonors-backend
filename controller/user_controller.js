@@ -2,10 +2,13 @@ import UserRepository from "../repository/user_repository.js"
 import {objectKeysToLC} from "../utils/key_to_lowercase.js";
 import DonationRepository from "../repository/donation_repository.js";
 import LocationController from "./location_controller.js";
+import insideRadius from "../utils/map_distance.js";
+import LocationRepository from "../repository/location_repository.js";
 
 const userRepo = new UserRepository();
 const donationRepository = new DonationRepository();
 const locationController = new LocationController();
+const locationRepository = new LocationRepository();
 
 export default class UserController{
     getUsers = async function (req, res, next) {
@@ -29,13 +32,31 @@ export default class UserController{
     }
 
     searchByBG = async function (req, res, next) {
-        let bloodGroup = req.params.blood_group;
+        // console.log(req.query)
+        let bloodGroup = req.query.blood_group;
+        // let user_id = req.body.user.id;
+        let radius = req.query.radius;
+        let latitude = +req.query.lat;
+        let longitude = +req.query.lng;
         // console.log(filterString)
-        const result = await userRepo.searchByBG(bloodGroup, false);
+        // console.log(bloodGroup)
+        let result = await userRepo.searchByBG(bloodGroup, false);
         // console.log(result)
 
         if(result.success){
-            let responseData = locationController.retriveLocationFromObject(result.data)
+            // let userLocation = await userRepo.findLocationOfUser(user_id);
+            // if(!userLocation.success){
+            //     return res.status(500).json({code: 500, error: "Internal server error"});
+            // }
+            // userLocation = userLocation.data[0];
+
+            result = result.data.filter(x => {
+                return insideRadius({latitude, longitude}, {
+                    latitude: x.latitude,
+                    longitude: x.longitude
+                }, radius)
+            })
+            let responseData = locationController.retriveLocationFromObject(result)
             return res.status(200).json({code: 200, data: responseData});
         }
         return res.status(500).json({code: 500, error: "Internal server error"})

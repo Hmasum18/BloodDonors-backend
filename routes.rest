@@ -7,43 +7,136 @@ GET {{api_url}}/api/user HTTP/1.1
 Content-Type: application/json
 authorization: {{token}}
 
+###{
+#  "code": 200,
+#  "data": [
+#    {
+#      "ID": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#      "LOCATION_ID": "c91d0d65-edcf-47c2-9f55-405244592d1d",
+#      "NAME": "m",
+#      "EMAIL": "m",
+#      "PASSWORD": "$2b$10$QL8GZD0E9Az6MePMfT4gKOpOaT1kpe9h/CExa.zuQbXaKv.Be/Y8.",
+#      "PHONE_NUMBER": "12345678910",
+#      "BLOOD_GROUP": "B+",
+#      "CREATED": "2022-02-09T11:06:09.000Z",
+#      "UPDATED": "2022-02-09T11:06:09.000Z",
+#      "ACTIVE": 1,
+#      "GENDER": "male"
+#    },
+#]
+#}
+
 ### fetch current user
 GET {{api_url}}/api/user/me HTTP/1.1
 Content-Type: application/json
 authorization: {{token}}
 
+###{
+#  "code": 200,
+#  "data": {
+#    "id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#    "name": "m",
+#    "email": "m",
+#    "phone_number": "12345678910",
+#    "blood_group": "B+",
+#    "created": "2022-02-09T11:06:09.000Z",
+#    "gender": "male",
+#    "location": {
+#      "latitude": 23.7251211,
+#      "longitude": 90.3925318,
+#      "description": "Ahsan Ullah Hall, Zahir Raihan Sharani Rd, Polashi, Bokshibazar, Dhaka, Dhaka Metropolitan, Dhaka District, Dhaka Division, 1211, Bangladesh"
+#    },
+#    "available": true,
+#    "last_donation": null
+#  }
+#}
+
 ### fetch user with id
-GET {{api_url}}/api/user/d9d5330c-62a3-427e-9aad-a749a29eceeb HTTP/1.1
+GET {{api_url}}/api/user/fetch/af4e5a14-5b0d-40cc-a28b-c28fd962439e HTTP/1.1
 Content-Type: application/json
 authorization: {{token}}
+
+###{
+#  "code": 200,
+#  "data": {
+#    "id": "af4e5a14-5b0d-40cc-a28b-c28fd962439e",
+#    "name": "brad",
+#    "email": "brad@email.com",
+#    "phone_number": "1234567",
+#    "blood_group": "AB+",
+#    "created": "2022-02-22T04:36:59.000Z",
+#    "gender": "male",
+#    "location": {
+#      "latitude": 23.7258109,
+#      "longitude": 90.3908448,
+#      "description": "Titumir Hall, BUET"
+#    },
+#    "available": true,
+#    "last_donation": null
+#  }
+#}
 
 ### fetch user with name
 GET {{api_url}}/api/user/search/B HTTP/1.1
 Content-Type: application/json
 authorization: {{token}}
 
+###{
+#  "code": 200,
+#  "data": [
+#    {
+#      "id": "af4e5a14-5b0d-40cc-a28b-c28fd962439e",
+#      "name": "brad"
+#    },
+#]}
+
 ### fetch user with bg
-GET {{api_url}}/api/user/search-bg/Ab+ HTTP/1.1
+GET {{api_url}}/api/user/search-bg?blood_group=AB%2B&radius=50km&lat=23.914&lng=90.752 HTTP/1.1
 Content-Type: application/json
 authorization: {{token}}
+
+###{
+#  "code": 200,
+#  "data": [
+#    {
+#      "name": "brad",
+#      "id": "af4e5a14-5b0d-40cc-a28b-c28fd962439e",
+#      "email": "brad@email.com",
+#      "phone": "1234567",
+#      "blood_group": "AB+",
+#      "gender": "male",
+#      "location": {
+#        "latitude": 23.7258109,
+#        "longitude": 90.3908448,
+#        "description": "Titumir Hall, BUET"
+#      }
+#    },
+#]}
 
 ### register
 POST {{api_url}}/api/auth/register
 Content-Type: application/json
 
 {
-    "name" : "brad",
-    "email" : "brad@email.com",
-    "password" : "brad",
+    "name" : "bear",
+    "email" : "bear@email.com",
+    "password" : "bear",
     "phone": "1234567",
     "bloodGroup" : "AB+",
     "gender": "male",
     "location" : {
-        "latitude" : 23.7258109,
-        "longitude" : 90.3908448,
-        "display_name": "Titumir Hall, BUET"
+        "latitude" : 25.7258109,
+        "longitude" : 83.3908448,
+        "display_name": "aula Hall, BUET"
     }
 }
+
+
+### response
+//{
+//  "code": 201
+//}
+
 
 ### login
 POST {{api_url}}/api/auth/login
@@ -53,6 +146,12 @@ Content-Type: application/json
     "email" : "m",
     "password" : "masum123"
 }
+
+###{
+#  "code": 200,
+#  "message": "Success",
+#  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE1YzkzMWY5LWQ5ZTMtNGViMC1iNGU2LTIzNTA1OTE1NzQ5MCIsIm5hbWUiOiJtIiwiZW1haWwiOiJtIiwiaWF0IjoxNjQ1NjkyNTU1LCJleHAiOjE2NDY5MDIxNTV9.Lm2JtrJaa20m842S5jyj7wfczwXyCEaj9lQib2dl1tI"
+#}
 
 ### blood post
 POST {{api_url}}/api/post/blood-post/
@@ -64,23 +163,91 @@ authorization: {{token}}
    "amount":1,
    "location":{
       "display_name":"bye",
-      "latitude":15.526,
-      "longitude":36.35
+      "latitude":15.0,
+      "longitude":36.9
    },
    "contact":"235468778965",
    "due_time":"2022-02-20",
    "additional_info":"{\"text\": \"need emergency\"}"
 }
 
+###{
+#  "code": 201,
+#  "message": "post created",
+#  "data": {
+#    "post_id": "402655fa-3624-4062-b0df-b8c9e95a8605",
+#    "blood_group": "O+",
+#    "amount": 1,
+#    "contact": "235468778965",
+#    "due_time": "2022-02-20T00:00:00.000Z",
+#    "additional_info": "{\"text\": \"need emergency\"}",
+#    "location": {
+#      "id": "edc64e59-badd-48b0-97cf-2ce13b9ea480",
+#      "latitude": 15.526000000000002,
+#      "longitude": 36.35,
+#      "description": "bye"
+#    },
+#    "user_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#    "user_name": "m"
+#  }
+#}
+
 ### blood post by id
 GET {{api_url}}/api/post/blood-post/ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92
 Content-Type: application/json
 authorization: {{token}}
 
+###{
+#  "code": 200,
+#  "data": {
+#    "post_id": "ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
+#    "blood_group": "B+",
+#    "amount": 1,
+#    "contact": "1",
+#    "due_time": "2022-02-09T11:06:00.000Z",
+#    "additional_info": "{\"text\":\"test\"}",
+#    "location": {
+#      "id": "3b513f7c-7865-445c-b1c4-d8327d546194",
+#      "latitude": 23.7264545,
+#      "longitude": 90.3972526,
+#      "description": "Dhaka Medical College Hospital, Zahir Raihan Road, Chankharpul, Bokshibazar, Dhaka, Dhaka Metropolitan, Dhaka District, Dhaka Division, 1000, Bangladesh",
+#      "created": "2022-02-09T11:06:44.000Z",
+#      "updated": "2022-02-09T11:06:44.000Z",
+#      "active": 1
+#    },
+#    "user_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#    "user_name": "m",
+#    "created": "2022-02-09T11:06:44.000Z"
+#  }
+#}
+
 ### all blood post
 GET {{api_url}}/api/post/blood-post/
 Content-Type: application/json
 authorization: {{token}}
+
+###{
+#  "code": 200,
+#  "message": "total count: 11",
+#  "data": [
+#    {
+#      "post_id": "402655fa-3624-4062-b0df-b8c9e95a8605",
+#      "blood_group": "O+",
+#      "amount": 1,
+#      "contact": "235468778965",
+#      "due_time": "2022-02-20T00:00:00.000Z",
+#      "additional_info": "{\"text\": \"need emergency\"}",
+#      "created": "2022-02-24T08:50:29.000Z",
+#      "user_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#      "user_name": "m",
+#      "location": {
+#        "id": "edc64e59-badd-48b0-97cf-2ce13b9ea480",
+#        "latitude": 15.526000000000002,
+#        "longitude": 36.35,
+#        "description": "bye"
+#      }
+#    },
+#}
 
 ### comment create
 POST {{api_url}}/api/comment/
@@ -92,10 +259,38 @@ authorization: {{token}}
   "text": "what happened"
 }
 
+###{
+#  "code": 201,
+#  "message": "comment created",
+#  "data": {
+#    "comment_id": "f768d9ff-2dbb-4691-9114-ee31cf56ebc9",
+#    "text": "what happened",
+#    "post_id": "ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
+#    "user_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#    "user_name": "m",
+#    "created": "2022-02-24T08:54:46.794Z"
+#  }
+#}
+
 ### comment get
 GET {{api_url}}/api/comment/ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92
 Content-Type: application/json
 authorization: {{token}}
+
+//{
+//  "code": 200,
+//  "message": "retrieved all comments",
+//  "data": [
+//    {
+//      "comment_id": "f768d9ff-2dbb-4691-9114-ee31cf56ebc9",
+//      "text": "what happened",
+//      "post_id": "ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
+//      "created": "2022-02-24T08:54:46.000Z",
+//      "user_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+//      "user_name": "m"
+//    },
+//]
+//}
 
 
 ### post react
@@ -107,6 +302,18 @@ authorization: {{token}}
   "post_id":"ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92"
 }
 
+###{
+#  "code": 200,
+#  "message": "reacted again",
+#  "data": {
+#    "post_id": "ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
+#    "user_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#    "react_name": "like",
+#    "user_name": "m",
+#    "created": "2022-02-24T08:55:56.280Z"
+#  }
+#}
+
 
 ###  get react
 
@@ -114,22 +321,76 @@ GET {{api_url}}/api/react/post/ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92
 Content-Type: application/json
 authorization: {{token}}
 
+###{
+#  "code": 200,
+#  "message": "retrieved all react",
+#  "length": 1,
+#  "data": [
+#    {
+#      "react_name": "like",
+#      "post_id": "ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92",
+#      "created": "2022-02-12T08:51:28.000Z",
+#      "user_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#      "user_name": "m"
+#    }
+#  ]
+#}
+
 ###  undo react
 DELETE {{api_url}}/api/react/post/ba46e5ac-89fa-4ada-9b1d-3b862b6d9f92
 Content-Type: application/json
 authorization: {{token}}
 
+#{
+#  "code": 202,
+#  "message": "react removed"
+#}
+
 
 ### get messages
-GET {{api_url}}/api/message/e4c78117-4493-4d2d-a3a1-6f21306d897e
+GET {{api_url}}/api/message/496f3e00-c53e-46af-8071-1cfd288e4e14
 Content-Type: application/json
 authorization: {{token}}
+
+#{
+#  "code": 200,
+#  "message": "retrieved all messages",
+#  "data": [
+#    {
+#      "sender": "m",
+#      "sender_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#      "receiver": "abul",
+#      "receiver_id": "496f3e00-c53e-46af-8071-1cfd288e4e14",
+#      "message": "hi hi hi",
+#      "sent_time": "2022-02-21T13:52:40.000Z",
+#      "seen_time": null
+#    },
+//]}
 
 
 ### get chat list
 GET {{api_url}}/api/message
 Content-Type: application/json
 authorization: {{token}}
+
+#{
+#  "code": 200,
+#  "message": "retrieved all messages",
+#  "data": [
+#    {
+#      "user_id": "74f4d938-67e2-4a7e-ba31-59238d7044bf",
+#      "user_name": "abul",
+#      "last_message": {
+#        "sender_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#        "sender": "m",
+#        "receiver_id": "74f4d938-67e2-4a7e-ba31-59238d7044bf",
+#        "receiver": "abul",
+#        "message": "blood de",
+#        "sent_time": "2022-02-21T13:53:53.000Z"
+#      },
+#      "is_sender": true
+#    },
+//]}
 
 ### create donation
 POST {{api_url}}/api/donation
@@ -145,11 +406,44 @@ authorization: {{token}}
   "donation_time": "2022-02-21"
 }
 
+###{
+#  "code": 200,
+#  "message": "retrieved all messages",
+#  "data": [
+#    {
+#      "user_id": "74f4d938-67e2-4a7e-ba31-59238d7044bf",
+#      "user_name": "abul",
+#      "last_message": {
+#        "sender_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#        "sender": "m",
+#        "receiver_id": "74f4d938-67e2-4a7e-ba31-59238d7044bf",
+#        "receiver": "abul",
+#        "message": "blood de",
+#        "sent_time": "2022-02-21T13:53:53.000Z"
+#      },
+#      "is_sender": true
+#    },
+
 
 ### get all notification
 GET {{api_url}}/api/notification
 Content-Type: application/json
 authorization: {{token}}
+
+###{
+#  "code": 200,
+#  "message": "all notification retrieved",
+#  "data": [
+#    {
+#      "actor_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#      "actor_name": "m",
+#      "type": "comment",
+#      "notification_id": 103,
+#      "entity_id": "9f930fc2-2d90-4ab2-8c2c-cd4940661b1e",
+#      "created": "2022-02-21T17:37:11.000Z",
+#      "message": "commented on your post"
+#    },
+#]}
 
 ### donation post create
 POST {{api_url}}/api/post/donation-post
@@ -157,25 +451,93 @@ Content-Type: application/json
 authorization: {{token}}
 
 {
-  "donation_id": "b96155cf-98d3-4854-995b-b0d30e63a4a5"
+  "donation_id": "a10df697-9d86-47c9-a6aa-89f97dd1bc3b"
 }
+
+###{
+#  "code": 201,
+#  "message": "donation post created",
+#  "data": {
+#    "post_id": "6171eb49-2051-4221-8a99-a6b0414d6255",
+#    "user_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#    "user_name": "m",
+#    "created": "2022-02-24T09:02:43.376Z",
+#    "donation_time": "2022-02-21T00:00:00.000Z",
+#    "location": {
+#      "description": "bye",
+#      "latitude": 15.526000000000002,
+#      "longitude": 36.35
+#    }
+#  }
+#}
+
 
 ### user donations get
 GET {{api_url}}/api/donation/33ab3559-4cc1-48d5-a005-1cbf9b0f3922
 Content-Type: application/json
 authorization: {{token}}
 
+###{
+#  "code": 200,
+#  "message": "donations retrieved",
+#  "data": [
+#    {
+#      "user_id": "33ab3559-4cc1-48d5-a005-1cbf9b0f3922",
+#      "user_name": "pepsi",
+#      "created": "2022-02-22T21:09:54.000Z",
+#      "donation_time": "2022-02-21T00:00:00.000Z",
+#      "location": {
+#        "latitude": 15.526000000000002,
+#        "longitude": 36.35,
+#        "description": "bye"
+#      }
+#    },
+#]}
+
 ### delete blood post
 DELETE {{api_url}}/api/post/blood-post/795c6270-59a0-4b06-9640-c5f20c42ece6
 Content-Type: application/json
 authorization: {{token}}
+
+###{
+#  "code": 202,
+#  "message": "you are not authorized to delete the post" or "post deleted"
+#}
 
 ### delete comment
 DELETE {{api_url}}/api/comment/55eb592a-97e0-4656-a632-24082e334973
 Content-Type: application/json
 authorization: {{token}}
 
+###{
+#  "code": 202,
+#  "message": "you are not authorized to delete the comment" or "comment deleted"
+#}
+
 ### get all blood post of user
 GET {{api_url}}/api/post/blood-post/me
 Content-Type: application/json
 authorization: {{token}}
+
+###{
+#  "code": 200,
+#  "message": "total count: 10",
+#  "data": [
+#    {
+#      "post_id": "402655fa-3624-4062-b0df-b8c9e95a8605",
+#      "blood_group": "O+",
+#      "amount": 1,
+#      "contact": "235468778965",
+#      "due_time": "2022-02-20T00:00:00.000Z",
+#      "additional_info": "{\"text\": \"need emergency\"}",
+#      "created": "2022-02-24T08:50:29.000Z",
+#      "user_id": "a5c931f9-d9e3-4eb0-b4e6-235059157490",
+#      "user_name": "m",
+#      "location": {
+#        "id": "edc64e59-badd-48b0-97cf-2ce13b9ea480",
+#        "latitude": 15.526000000000002,
+#        "longitude": 36.35,
+#        "description": "bye"
+#      }
+#    },
+#]}
