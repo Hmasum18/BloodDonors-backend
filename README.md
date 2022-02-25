@@ -1,8 +1,8 @@
-<h1 id="title" align="center">Welcome to readme-template-generator 👋</h1>
+<h1 id="title" align="center">Welcome to BloodDonors Backend 👋</h1>
 
-<h4 align="center">🚧 readme-template-generator in development... 🚧</h4>
+<h4 align="center">🚧 Blood donors backend project in development... 🚧</h4>
 
-> A readme template generator for your repositories
+> A project to help you connect with blood donors and people who need blood.
 
 ### 🔖 Table Of Contents
 
