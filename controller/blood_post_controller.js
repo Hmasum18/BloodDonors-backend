@@ -140,9 +140,10 @@ export default class BloodPostController{
     }
 
     getAllBloodPostOfUser = async (req, res) => {
-        let user_id = req.body.user.id;
+        //let user_id = req.body.user.id;
+        let user_id = req.params.user_id;
         const bloodPostResult = await bloodPostRepository.findAllByUser(user_id, false);
-        // console.log(bloodPostResult);
+        console.log(bloodPostResult);
         if(!bloodPostResult.success){
             return res.status(500).json({code: 500, message: "server side problem"})
         }

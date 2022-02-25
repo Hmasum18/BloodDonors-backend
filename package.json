@@ -1,12 +1,12 @@
 {
-  "name": "github.hmasum18.blooddonor",
+  "name": "BloodDonors-Backend",
   "version": "1.0.0",
   "description": "Blood management system",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "dev": "nodemon .",
-    "start": "node ."
+    "start": "nodemon ."
   },
   "keywords": [
     "nodejs",
