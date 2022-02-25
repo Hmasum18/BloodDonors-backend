@@ -3,6 +3,7 @@
 <h4 align="center">🚧 Blood donors backend project in development... 🚧</h4>
 
 > A project to help you connect with blood donors and people who need blood.
+> Front end link: - [https://github.com/AshfaqRahman/BloodDonors-frontend](https://github.com/AshfaqRahman/BloodDonors-frontend)
 
 ### 🔖 Table Of Contents
 
@@ -173,7 +174,7 @@ npm run dev
 
 <h2 id="license">🔏 License</h2>
 
-Copyright © 2022 [Hasan Masum <hasanmasum1852@gmail.com>](https://github.com/hmasum52)
+Copyright © 2022 BloodDonors
 
 This project is licensed by [MIT License](https://api.github.com/licenses/mit).
 
