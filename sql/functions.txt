@@ -1,0 +1,9 @@
+CREATE OR REPLACE FUNCTION email_check(in_email in VARCHAR2) 
+return NUMBER is 
+	flag Number;
+begin 
+	flag := 0;
+	select 1 into flag from users where EMAIL = in_email;
+	return flag;
+end;
+/

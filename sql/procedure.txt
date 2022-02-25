@@ -1,0 +1,89 @@
+CREATE OR REPLACE PROCEDURE delete_comment (comment_id in VARCHAR2, user_id_in in VARCHAR2, y OUT SYS_REFCURSOR)
+is
+	flag NUMBER;
+begin 
+	SELECT 1 into flag from COMMENTS c join post p on (c.POST_ID = p.id)
+		where (c.user_id = user_id_in or p.USER_ID = user_id_in ) and c.id = comment_id and c.active = 1 and p.ACTIVE = 1;
+	update comments set active = 0 where id = comment_id and active = 1;
+	open y for select 'comment deleted' "message" from dual;
+	
+EXCEPTION
+	WHEN NO_DATA_FOUND THEN
+		open y for select 'you are not authorized to delete the comment' "message" from dual;
+	WHEN TOO_MANY_ROWS THEN
+		open y for select 'server error' "message" from dual;
+end;
+/
+
+
+CREATE OR REPLACE PROCEDURE delete_post (post_id in VARCHAR2, user_id_in in VARCHAR2, y OUT SYS_REFCURSOR)
+is
+	flag NUMBER;
+begin 
+	SELECT 1 into flag from post
+		where user_id = user_id_in and id = post_id and active = 1;
+	update post set active = 0 where id = post_id and active = 1;
+	open y for select 'post deleted' "message" from dual;
+	
+EXCEPTION
+	WHEN NO_DATA_FOUND THEN
+		open y for select 'you are not authorized to delete the post' "message" from dual;
+	WHEN TOO_MANY_ROWS THEN
+		open y for select 'server error' "message" from dual;
+end;
+/
+
+
+CREATE OR REPLACE PROCEDURE get_all_notification (user_id_in in VARCHAR2, x OUT SYS_REFCURSOR)
+is
+
+begin 
+
+	open x for select 
+	
+	u.id "actor_id",
+	u.name "actor_name",
+	a_t.ENTITY "type",
+	n.ACTIVITY_OBJECT_ID "notification_id",
+	ao.ENTITY_ID "entity_id",
+	n.created "created",
+	(
+	case 
+-- 		when a_t.ENTITY = 'message'
+-- 		then 'you received a message'
+		when a_t.ENTITY = 'blood post'
+		then 'posted for ' || n.BLOOD_GROUP || ' blood'
+		when a_t.ENTITY = 'comment'
+		then 'commented on your post'
+		when a_t.ENTITY = 'post' and a_t.action = 'reacted'
+		then 'reacted on your post'
+	end 
+	) "message"
+		
+
+	FROM
+	(select n.created, n.ACTIVITY_OBJECT_ID, u.BLOOD_GROUP blood_group from NOTIFICATION n join users u on(u.id = n.RECEIVER_USER_ID) where n.SEEN is null and n.active = 1 and n.RECEIVER_USER_ID = user_id_in)
+	n join ACTIVITY_OBJECT ao on (n.ACTIVITY_OBJECT_ID = ao.id)
+	join ACTION_TYPE a_t on (ao.ACTION_TYPE_ID = a_t.id)
+	join users u on (ao.ACTOR_ID = u.id)
+	order by n.created desc
+	;
+end;
+/
+
+CREATE OR REPLACE PROCEDURE get_User (email_in in VARCHAR2, x OUT SYS_REFCURSOR)
+is
+	
+begin 
+	open x for select * from "USERS" where "EMAIL" = email_in;
+end;
+/
+
+CREATE OR REPLACE PROCEDURE get_User_by_name (filter_name in VARCHAR2, x OUT SYS_REFCURSOR)
+is
+	filter VARCHAR2(100);
+begin 
+	filter := '%' || LOWER(filter_name) || '%';
+	open x for select id, name from "USERS" where LOWER(name) like filter;
+end;
+/

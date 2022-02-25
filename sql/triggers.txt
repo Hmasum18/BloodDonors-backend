@@ -1,0 +1,530 @@
+create or replace TRIGGER before_insert_in_action_type
+before insert
+on action_type
+for each row
+
+declare
+	
+BEGIN
+	:new.created := SYSDATE();
+	:new.updated := sysdate();
+	:new.active := 1;
+END;
+/
+
+
+create or replace TRIGGER updating_action_type
+before update
+on action_type
+for each row
+
+declare
+	
+BEGIN
+	:new.updated := sysdate();
+END;
+
+/
+
+
+create or replace TRIGGER before_insert_in_activity_object
+before insert
+on activity_object
+for each row
+
+declare
+	
+BEGIN
+	:new.created := SYSDATE();
+	:new.updated := sysdate();
+	:new.active := 1;
+END;
+/
+
+create or replace TRIGGER updating_activity_object
+before update
+on activity_object
+for each row
+
+declare
+	
+BEGIN
+	:new.updated := sysdate();
+END;
+
+/
+
+create or replace TRIGGER updating_blood_post
+after update
+on BLOOD_POST
+for each row
+
+declare
+	post_id VARCHAR2(36);
+	
+BEGIN
+	post_id := :new.post_id;
+	UPDATE post set UPDATED = SYSDATE() where id = post_id;
+END;
+
+/
+
+
+create or replace TRIGGER NOTIFICATION_for_blood
+after insert 
+-- of BLOOD_GROUP
+on blood_post 
+for each row
+DECLARE
+	a_t NUMBER;
+	user_id VARCHAR2(36);
+	act_obj_id NUMBER;
+BEGIN
+	select id into a_t
+	from ACTION_TYPE where ENTITY = 'blood post' and action = 'created';
+-- -- 	
+	act_obj_id := ACTIVITY_OBJECT_ID_seq.nextval;
+-- 	
+	select user_id into user_id
+	from post where id = :new.post_id;
+-- 	
+	insert into ACTIVITY_OBJECT (id, ACTOR_ID, ACTION_TYPE_ID, ENTITY_ID) VALUES (act_obj_id, user_id, a_t,:new.post_id);
+-- 	
+	for u in 
+	(
+		SELECT id from users where BLOOD_GROUP = :new.BLOOD_GROUP
+	)
+	LOOP	
+		INSERT into NOTIFICATION ( RECEIVER_USER_ID, ACTIVITY_OBJECT_ID) VALUES (u.id, act_obj_id);
+	END LOOP;
+	
+END;
+/
+
+
+create or replace TRIGGER NOTIFICATION_for_blood_after_update
+before update
+of BLOOD_GROUP
+on blood_post 
+for each row
+DECLARE
+	a_t NUMBER;
+	user_id VARCHAR2(36);
+	act_obj_id NUMBER;
+	old_bg VARCHAR2(5);
+	new_bg VARCHAR2(5);
+BEGIN
+	
+	select id into a_t
+	from ACTION_TYPE where ENTITY = 'blood post' and action = 'created';
+-- -- 	
+	act_obj_id := ACTIVITY_OBJECT_ID_seq.nextval;
+-- 	
+	select user_id into user_id
+	from post where id = :new.post_id;
+-- 	
+	select id into act_obj_id from ACTIVITY_OBJECT where ACTOR_ID = user_id and ACTION_TYPE_ID = a_t and ENTITY_ID = :new.post_id;
+-- 	insert into ACTIVITY_OBJECT (id, ACTOR_ID, ACTION_TYPE_ID, ENTITY_ID) VALUES (act_obj_id, user_id, a_t,:new.post_id);
+	
+-- 	
+	DELETE from NOTIFICATION where ACTIVITY_OBJECT_ID in (SELECT ACTIVITY_OBJECT_ID from NOTIFICATION where ACTIVITY_OBJECT_ID = act_obj_id);
+
+	for u in 
+	(
+		SELECT id from users where BLOOD_GROUP = :new.BLOOD_GROUP
+	)
+	LOOP	
+		INSERT into NOTIFICATION ( RECEIVER_USER_ID, ACTIVITY_OBJECT_ID) VALUES (u.id, act_obj_id);
+	END LOOP;
+	
+END;
+/
+
+
+
+create or replace TRIGGER before_insert_in_comments
+before insert
+on comments
+for each row
+
+declare
+	
+BEGIN
+	:new.created := SYSDATE();
+	:new.updated := sysdate();
+	:new.active := 1;
+END;
+
+/
+
+create or replace TRIGGER updating_comments
+before update
+on comments
+for each row
+
+declare
+	
+BEGIN
+	:new.updated := sysdate();
+END;
+
+/
+
+create or replace TRIGGER comment_notification
+after insert
+on comments
+for each row
+
+declare
+	post_id VARCHAR2(36);
+	user_id VARCHAR2(36);
+	act_type NUMBER;
+	act_obj_id NUMBER;
+BEGIN
+	post_id := :new.POST_ID;
+	select post.USER_ID into user_id from post where id = post_id;
+	select id into act_type from ACTION_TYPE where entity = 'comment' and action = 'created';
+	act_obj_id := ACTIVITY_OBJECT_ID_seq.nextval;
+	INSERT into ACTIVITY_OBJECT (id, ACTOR_ID, ACTION_TYPE_ID, ENTITY_ID) values (act_obj_id, :new.USER_ID, act_type, :new.ID);
+	INSERT into NOTIFICATION (RECEIVER_USER_ID, ACTIVITY_OBJECT_ID) VALUES (user_id, act_obj_id);
+END;
+
+/
+
+create or replace TRIGGER delete_comment
+after update
+of active
+on COMMENTS
+for each ROW
+WHEN (new.active = 0)
+DECLARE
+	
+begin 
+	for r in (
+		select id from ACTIVITY_OBJECT where ENTITY_ID = :new.id
+	)
+	LOOP
+		update NOTIFICATION set active = 0 where ACTIVITY_OBJECT_ID = r.id;
+		update ACTIVITY_OBJECT set active = 0 where id = r.id;
+-- 		IF  THEN
+-- 			EXIT; 
+-- 		END IF; 
+	END LOOP;
+
+end;
+/
+
+create or replace TRIGGER set_comment
+after update
+of active
+on COMMENTS
+for each ROW
+WHEN (new.active = 1)
+DECLARE
+	
+begin 
+	for r in (
+		select id from ACTIVITY_OBJECT where ENTITY_ID = :new.id and active = 0
+	)
+	LOOP
+		update NOTIFICATION set active = 1 where ACTIVITY_OBJECT_ID = r.id;
+		update ACTIVITY_OBJECT set active = 1 where id = r.id;
+-- 		IF  THEN
+-- 			EXIT; 
+-- 		END IF; 
+	END LOOP;
+
+end;
+/
+
+create or replace TRIGGER before_insert_in_donation
+before insert
+on donation
+for each row
+
+declare
+	
+BEGIN
+	:new.created := SYSDATE();
+	:new.updated := sysdate();
+	:new.active := 1;
+END;
+
+/
+
+create or replace TRIGGER updating_donation
+before update
+on DONATION
+for each row
+
+declare
+	
+BEGIN
+	:new.updated := sysdate();
+END;
+
+/
+
+create or replace TRIGGER before_insert_in_location
+before insert
+on location
+for each row
+
+declare
+	
+BEGIN
+	:new.created := SYSDATE();
+	:new.updated := sysdate();
+	:new.active := 1;
+END;
+/
+
+create or replace TRIGGER updating_location
+before update
+on location
+for each row
+
+declare
+	
+BEGIN
+	:new.updated := sysdate();
+END;
+
+/
+
+create or replace TRIGGER before_insert_in_message
+before insert
+on message
+for each row
+
+declare
+	
+BEGIN
+	:new.created := SYSDATE();
+	:new.updated := sysdate();
+	:new.active := 1;
+END;
+/
+
+
+create or replace TRIGGER before_insert_in_notification
+before insert
+on notification
+for each row
+
+declare
+	
+BEGIN
+	:new.created := SYSDATE();
+	:new.updated := sysdate();
+	:new.active := 1;
+END;
+/
+-- drop trigger before_insert_in_notification;
+
+create or replace TRIGGER updating_notification
+before update
+on notification
+for each row
+
+declare
+	
+BEGIN
+	:new.updated := sysdate();
+END;
+
+/
+
+
+create or replace TRIGGER before_insert_in_post
+before insert
+on post
+for each row
+
+declare
+	
+BEGIN
+	:new.created := SYSDATE();
+	:new.updated := sysdate();
+	:new.active := 1;
+END;
+
+/
+
+create or replace TRIGGER updating_post
+before update
+on post
+for each row
+
+declare
+	
+BEGIN
+	:new.updated := sysdate();
+END;
+
+/
+
+create or replace TRIGGER deleting_post
+after update
+of active
+on post
+for each ROW
+WHEN (new.active = 0)
+DECLARE
+	
+begin 
+	for r in (
+	select id from ACTIVITY_OBJECT where ENTITY_ID = :new.id
+	)
+	LOOP
+		update NOTIFICATION set active = 0 where ACTIVITY_OBJECT_ID = r.id;
+		update ACTIVITY_OBJECT set active = 0 where id = r.id;
+-- 		IF  THEN
+-- 			EXIT; 
+-- 		END IF; 
+	END LOOP;
+
+end;
+/
+
+create or replace TRIGGER set_post
+after update
+of active
+on post
+for each ROW
+WHEN (new.active = 1)
+DECLARE
+	
+begin 
+	for r in (
+	select id from ACTIVITY_OBJECT where ENTITY_ID = :new.id
+	)
+	LOOP
+		update NOTIFICATION set active = 1 where ACTIVITY_OBJECT_ID = r.id;
+		update ACTIVITY_OBJECT set active = 1 where id = r.id;
+-- 		IF  THEN
+-- 			EXIT; 
+-- 		END IF; 
+	END LOOP;
+
+end;
+/
+
+create or replace TRIGGER before_insert_in_post_react
+before insert
+on post_react
+for each row
+
+declare
+	
+BEGIN
+	:new.created := SYSDATE();
+	:new.updated := sysdate();
+	:new.active := 1;
+END;
+/
+
+create or replace TRIGGER updating_post_react
+before update
+on post_react
+for each row
+
+declare
+	
+BEGIN
+	:new.updated := sysdate();
+END;
+/
+
+
+create or replace TRIGGER POST_REACT_notification
+after insert
+on POST_REACT
+for each row
+
+declare
+	post_id VARCHAR2(36);
+	user_id VARCHAR2(36);
+	act_type NUMBER;
+	act_obj_id NUMBER;
+BEGIN
+	post_id := :new.POST_ID;
+	select post.USER_ID into user_id from post where id = post_id;
+	select id into act_type from ACTION_TYPE where entity = 'post' and action = 'reacted';
+	act_obj_id := ACTIVITY_OBJECT_ID_seq.nextval;
+	INSERT into ACTIVITY_OBJECT (id, ACTOR_ID, ACTION_TYPE_ID, ENTITY_ID) values (act_obj_id, :new.USER_ID, act_type, :new.POST_ID);
+	INSERT into NOTIFICATION (RECEIVER_USER_ID, ACTIVITY_OBJECT_ID) VALUES (user_id, act_obj_id);
+END;
+
+/
+
+create or replace TRIGGER delete_post_react
+after update
+of active
+on POST_REACT
+for each ROW
+WHEN (new.active = 0)
+DECLARE
+	
+begin 
+	for r in (
+		select id from ACTIVITY_OBJECT where ENTITY_ID = :new.post_id and ACTOR_ID = :new.user_id and active = 1
+	)
+	LOOP
+		update NOTIFICATION set active = 0 where ACTIVITY_OBJECT_ID = r.id;
+		update ACTIVITY_OBJECT set active = 0 where id = r.id;
+-- 		IF  THEN
+-- 			EXIT; 
+-- 		END IF; 
+	END LOOP;
+
+end;
+/
+
+create or replace TRIGGER set_post_react
+after update
+of active
+on POST_REACT
+for each ROW
+WHEN (new.active = 1)
+DECLARE
+	
+begin 
+	for r in (
+		select id from ACTIVITY_OBJECT where ENTITY_ID = :new.post_id and ACTOR_ID = :new.user_id and active = 0
+	)
+	LOOP
+		update NOTIFICATION set active = 1 where ACTIVITY_OBJECT_ID = r.id;
+		update ACTIVITY_OBJECT set active = 1 where id = r.id;
+	END LOOP;
+
+end;
+/
+
+create or replace TRIGGER before_insert_in_users
+before insert
+on users
+for each row
+
+declare
+	
+BEGIN
+	:new.created := SYSDATE();
+	:new.updated := sysdate();
+	:new.active := 1;
+END;
+/
+
+
+create or replace TRIGGER updating_users
+before update
+on users
+for each row
+
+declare
+	
+BEGIN
+	:new.updated := sysdate();
+END;
+
+/
